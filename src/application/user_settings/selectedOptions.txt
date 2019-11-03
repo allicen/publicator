@@ -1,7 +1,0 @@
-requiredH1=true
-requiredUrl=false
-requiredAnons=false
-requiredTitle=false
-requiredDescription=false
-requiredImage=false
-requiredHtml=false
