@@ -90,5 +90,9 @@ publicator.iml
 src/JAR/
 src/application/controller/handlers/
 src/application/user_settings/settings.txt
+src/application/user_settings/selectedOptions.txt
 src/application/logs/logs.txt
+src/application/user_files/tmp/html_file/*
+src/application/user_files/tmp/images/*
 src/application/user_settings/.gitignore
+src/application/user_files/
