@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Images {
     private static final int MAX_WIDTH_IMAGE = 1000; // Максимальная ширина картинки
-    private static final String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\images\\"; // Директория, в которую сохраняется картинка
+    private static final String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
 
     private static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type){
         BufferedImage resizeImage = new BufferedImage(width, height, type);
