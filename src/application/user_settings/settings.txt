@@ -1,4 +1,4 @@
-ftphost=
+ftphost=123456
 ftpuser=
 ftppassword=
 sshhost=
