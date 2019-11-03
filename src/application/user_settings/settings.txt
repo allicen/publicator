@@ -1,0 +1,12 @@
+ftphost=
+ftpuser=
+ftppassword=
+sshhost=
+sshuser=
+sshpassword=
+sshport=
+mysqlhost=
+mysqluser=
+mysqlpassword=
+mysqldb=
+imgDir=/www/blog/

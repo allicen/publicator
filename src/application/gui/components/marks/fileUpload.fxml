@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<HBox spacing="10" minWidth="200" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@../../../images/ok24.png" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    <Label text="Файл загружен!" fx:id="changeText" styleClass="green-text-notice"/>
+</HBox>

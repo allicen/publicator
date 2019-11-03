@@ -1,0 +1,122 @@
+.root{
+    -fx-background-color: #fff;
+    -fx-font-size: 13;
+}
+.button, .menu, .menu-item, .tab, .radio-button{
+    -fx-cursor: hand;
+}
+
+.title-tab{
+    -fx-font-size: 18;
+    -fx-fill: #024A68;
+    -fx-font-weight: bold;
+}
+
+.main-btn{
+    -fx-font-size: 18 !important;
+    -fx-background-color: #63AFD0;
+    -fx-text-fill: black;
+}
+
+.main-btn:hover{
+    -fx-background-color: #225E79;
+    -fx-text-fill: white;
+}
+
+.button{
+    -fx-font-size: 14;
+}
+
+.notice{
+    -fx-text-fill: #888;
+}
+
+.label-text{
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+}
+
+.label-text{
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+}
+
+.red-text{
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+}
+
+.red-text-notice{
+    -fx-text-fill: red;
+}
+
+.green-text-notice{
+    -fx-text-fill: green;
+}
+
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color:transparent;
+}
+
+.tab-pane {
+}
+
+.tab {
+    -fx-padding: 5 10;
+    -fx-background-color:#a6dcf4;
+    -fx-border-width: 0 5 0 0;
+    -fx-border-color: white;
+}
+
+.tab:selected {
+    -fx-background-color:#024A68;
+    -fx-text-base-color: white;
+    -fx-focus-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.tab:focused{
+    -fx-background-color:#024A68;
+    -fx-focus-color: transparent;
+}
+
+.tab:selected .focus-indicator{
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.cancel-button{
+    -fx-background-color:transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #888;
+    -fx-padding: 0;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888;
+}
+
+.cancel-button:hover{
+    -fx-border-color: #fff;
+    -fx-text-fill: #000;
+}
+
+.getCategoriesBtn{
+    -fx-background-color:transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: red;
+    -fx-padding: 0;
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+}
+
+.getCategoriesBtn:hover{
+    -fx-border-color: #fff;
+    -fx-text-fill: #be2121;
+}
+
+
+
+
+
