@@ -95,3 +95,4 @@ src/application/logs/logs.txt
 src/application/user_files/tmp/html_file/read.html
 src/application/user_files/tmp/images/image1.jpeg
 src/application/user_files/tmp/images/image2.jpeg
+src/.gitignore
