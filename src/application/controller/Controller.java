@@ -509,7 +509,7 @@ public class Controller implements Initializable {
 
     private String getDate(){
         Date date = new Date();
-        return String.format("%tF", date);
+        return String.format("%tF", date); //test
     }
 
 
