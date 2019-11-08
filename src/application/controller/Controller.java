@@ -1,12 +1,10 @@
 package application.controller;
 
 import application.Main;
+import application.controller.handlers.Logs;
 import application.parser.MainParserClass;
-import com.jcraft.jsch.IO;
 import com.jcraft.jsch.JSch;
 
-import java.net.MalformedURLException;
-import java.net.URLEncoder;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
@@ -14,13 +12,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import com.jcraft.jsch.Session;
-import javafx.animation.KeyValue;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.beans.binding.StringBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,12 +24,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.util.Duration;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import sun.rmi.runtime.Log;
 
 
 import javax.swing.*;
@@ -160,6 +150,37 @@ public class Controller implements Initializable {
     public CheckBox requiredImage;
     public CheckBox requiredHtml;
 
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            Map <TextField, String> userSettings = getCustomSettings();
+            for(TextField key : userSettings.keySet()){
+                key.setText(userSettings.get(key));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Map <CheckBox, String> userCheckSettings = getCustomerCheckedImportSettings();
+            for(CheckBox key : userCheckSettings.keySet()){
+                key.setSelected(Boolean.parseBoolean(userCheckSettings.get(key)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        checkSettings(new StringBuilder());
+//        try {
+//            infoLogs.setText(Logs.getLogFileSize());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+
     private ArrayList<TextField> addFields(){
         return new ArrayList<>(Arrays.asList(ftphost, ftpuser, ftppassword, sshhost, sshuser, sshpassword, sshport, mysqlhost, mysqluser, mysqlpassword, mysqldb, imgDir));
     }
@@ -202,7 +223,7 @@ public class Controller implements Initializable {
         PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt"));
         pw.print(newSettings);
         pw.close();
-        addLogs("Изменены пользовательские настройки");
+        Logs.addLogs("Обновлены настройки");
     }
 
     private Map<CheckBox, String> getCustomerCheckedImportSettings() throws IOException { // Получить настройки импорта
@@ -227,7 +248,6 @@ public class Controller implements Initializable {
                 }
             }
         }
-        addLogs("Получены пользовательские настройки");
         return userCheck;
     }
 
@@ -245,36 +265,9 @@ public class Controller implements Initializable {
         PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt"));
         pw.print(newSettingsOptions);
         pw.close();
-        addLogs("Изменены настройки импорта");
+        Logs.addLogs("Изменены настройки импорта");
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            Map <TextField, String> userSettings = getCustomSettings();
-            for(TextField key : userSettings.keySet()){
-                key.setText(userSettings.get(key));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Map <CheckBox, String> userCheckSettings = getCustomerCheckedImportSettings();
-            for(CheckBox key : userCheckSettings.keySet()){
-                key.setSelected(Boolean.parseBoolean(userCheckSettings.get(key)));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        checkSettings(new StringBuilder());
-        try {
-            infoLogs.setText(getLogFileSize());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void checkSettings(StringBuilder newSettings){ // Проверка полей настроек на заполненность
@@ -359,7 +352,7 @@ public class Controller implements Initializable {
             try {
                 File file = window.getSelectedFile();
                 isValidateFile = validateFile(file);
-                addLogs("Выбран файл " + file.getName());
+                Logs.addLogs("Выбран файл " + file.getName());
                 if(isValidateFile){
                     FileInputStream getFile = new FileInputStream(file);
                     document = new XWPFDocument(getFile);
@@ -526,11 +519,11 @@ public class Controller implements Initializable {
             session.setPassword(sshpassword.getText());
             session.setConfig("StrictHostKeyChecking", "no");
             System.out.println("Устанавливаю соединение...");
-            addLogs("Устанавливаю соединение...");
+            Logs.addLogs("Устанавливаю соединение...");
             session.connect();
             int assinged_port=session.setPortForwardingL(lport, rhost, rport);
             System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
-            addLogs("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+            Logs.addLogs("localhost:"+assinged_port+" -> "+rhost+":"+rport);
         }
         catch(Exception e){
             System.err.print(e);
@@ -569,7 +562,7 @@ public class Controller implements Initializable {
         catch (Exception e){
             errors.setText("Не могу подключиться!\nПроверьте корректность доступов.");
             try {
-                addLogs(e.toString());
+                Logs.addLogs(e.toString());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -601,7 +594,7 @@ public class Controller implements Initializable {
             int update = st.executeUpdate(sql);
             if(update >= 1){
                 System.out.println("Информация добавлена");
-                addLogs("Запись \"" + postH1.getText() + "\" добавлена.\nЗапрос: " + sql);
+                Logs.addLogs("Запись \"" + postH1.getText() + "\" добавлена.\nЗапрос: " + sql);
                 published.setDisable(true);
                 readyInfo.setVisible(false);
                 success.setText("Статья успешно добавлена!");
@@ -609,11 +602,11 @@ public class Controller implements Initializable {
             }
             else{
                 System.out.println("Информация не добавлена");
-                addLogs("Запись \"" + postH1.getText() + "\" не добавлена.\nЗапрос: " + sql);
+                Logs.addLogs("Запись \"" + postH1.getText() + "\" не добавлена.\nЗапрос: " + sql);
             }
         }catch (SQLException s){
             System.out.println("SQL запрос не выполнен - ошибки!");
-            addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
         }
     }
 
@@ -633,13 +626,13 @@ public class Controller implements Initializable {
                 category.put(id, name);
             }
             System.out.println("Данные получены.");
-            addLogs("Данные "+category+" получены.\nЗапрос: " + sql);
+            Logs.addLogs("Данные "+category+" получены.\nЗапрос: " + sql);
             success.setText("Данные получены!");
             return category;
 
         }catch (SQLException s){
             System.out.println("SQL запрос не выполнен - ошибки!");
-            addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
             return null;
         }
     }
@@ -659,17 +652,17 @@ public class Controller implements Initializable {
             int update = st.executeUpdate(sql);
             if(update >= 1){
                 System.out.println("Информация добавлена");
-                addLogs("Категория \"" + categoryName.getText() + "\" добавлена.\nЗапрос: " + sql);
+                Logs.addLogs("Категория \"" + categoryName.getText() + "\" добавлена.\nЗапрос: " + sql);
                 success.setText("Категория успешно добавлена!");
                 success.setStyle("-fx-font-size: 16");
             }
             else{
                 System.out.println("Информация не добавлена");
-                addLogs("Категория \"" + categoryName.getText() + "\" не добавлена.\nЗапрос :" + sql);
+                Logs.addLogs("Категория \"" + categoryName.getText() + "\" не добавлена.\nЗапрос :" + sql);
             }
         }catch (SQLException s){
             System.out.println("SQL запрос не выполнен - ошибки!");
-            addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
         }
     }
 
@@ -853,99 +846,5 @@ public class Controller implements Initializable {
             errors.setText("Ошибка при добавлении категории!\nНе заполнены обязательные поля.");
         }
     }
-
-
-    // Запись логов
-    private void addLogs(String text) throws IOException{
-        String filePath = "E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt";
-        Date date = new Date();
-        String today = String.format("%tF %tT", date, date);
-        text = today + "\n" + text + "\n\n";
-        try {
-            Files.write(Paths.get(filePath), text.getBytes(), StandardOpenOption.APPEND);
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
-    }
-
-    @FXML
-    private void getLogs() throws IOException {
-
-        StringBuilder content = new StringBuilder();
-
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt");
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()){
-            content.append(sc.nextLine()).append("<br>");
-        }
-        WebEngine webEngine = allLogs.getEngine();
-        webEngine.loadContent(String.valueOf(content), "text/html");
-        infoLogs.setText(getLogFileSize());
-
-        logActionResult.setVisible(true);
-        logActionResult.setText("Логи получены!");
-        timer.schedule( // Таймер для скрытия уведомлений
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        logActionResult.setVisible(false);
-                    }
-                }, 500);
-    }
-
-    @FXML
-    private void deleteLogs() throws IOException {
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt"));
-        pw.print("");
-        pw.close();
-        getLogs();
-        infoLogs.setText(getLogFileSize());
-
-        logActionResult.setText("Логи удалены!");
-        timer.schedule( // Таймер для скрытия уведомлений
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        logActionResult.setVisible(false);
-                    }
-                }, 500);
-    }
-
-    @FXML
-    private void downloadLogs() throws IOException {
-        URL fileLogUrl = new URL("https://github.com/allicen/Java-10000/blob/master/alibaba/README.md");
-        ReadableByteChannel rbc = Channels.newChannel(fileLogUrl.openStream());
-        FileOutputStream fos = new FileOutputStream("logs.txt");
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        rbc.close();
-
-        logActionResult.setVisible(true);
-        logActionResult.setText("Файл скачан!");
-        timer.schedule( // Таймер для скрытия уведомлений
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        logActionResult.setVisible(false);
-                    }
-                }, 500);
-    }
-
-
-    private String getLogFileSize() throws IOException {
-        File logFile = new File("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt");
-        String size = "";
-        if(logFile.exists()){
-            size = String.valueOf(logFile.length());
-        }else {
-            addLogs("Запрос к несуществующему файлу " + logFile + ".");
-            return null;
-        }
-        return "Размер файла логов: " + size + " bytes";
-    }
-
-
-
 
 }

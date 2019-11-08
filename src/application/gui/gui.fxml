@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -425,17 +421,7 @@
                         </VBox>
 
                         <VBox fx:id="showLogs" visible="false" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
-                            <VBox spacing="10">
-                                <Text styleClass="title-tab" text="★ Просмотр логов"/>
-                                <HBox spacing="10">
-                                    <Button text="Загрузить логи" onAction="#getLogs"/>
-                                    <Button text="Скачать логи" onAction="#downloadLogs"/>
-                                    <Button text="Удалить логи" onAction="#deleteLogs"/>
-                                    <Label text="" fx:id="logActionResult" styleClass="green-text-notice"/>
-                                </HBox>
-                                <Label text="" fx:id="infoLogs"/>
-                                <WebView fx:id="allLogs"/>
-                            </VBox>
+                            <fx:include source="components/logPage.fxml"/>
                         </VBox>
 
                         <WebView fx:id="about"/>

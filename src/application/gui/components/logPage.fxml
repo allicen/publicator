@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controller.handlers.Logs">
+    <Text styleClass="title-tab" text="★ Просмотр логов"/>
+    <HBox spacing="10">
+        <Button text="Загрузить логи" onAction="#getLogs"/>
+        <Button text="Скачать логи" onAction="#downloadLogs"/>
+        <Button text="Удалить логи" onAction="#deleteLogs"/>
+        <Label fx:id="logActionResult" styleClass="green-text-notice"/>
+    </HBox>
+    <Label fx:id="infoLogs"/>
+    <WebView fx:id="allLogs"/>
+</VBox>
