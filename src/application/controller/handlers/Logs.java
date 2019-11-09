@@ -2,7 +2,9 @@ package application.controller.handlers;
 
 import application.controller.Controller;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 import java.io.*;
 import java.net.URL;
@@ -17,6 +19,10 @@ import java.util.Scanner;
 import java.util.TimerTask;
 
 public class Logs extends Controller {
+    // Логи
+    public Label infoLogs;
+    public WebView allLogs;
+    public Label logActionResult;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {

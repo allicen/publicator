@@ -2,14 +2,10 @@ package application.controller;
 
 import application.Main;
 import application.controller.handlers.Logs;
+import application.controller.handlers.UserSettings;
 import application.parser.MainParserClass;
 import com.jcraft.jsch.JSch;
 
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import com.jcraft.jsch.Session;
 import javafx.fxml.FXML;
@@ -45,6 +41,10 @@ import java.util.Timer;
 public class Controller implements Initializable {
     public static Timer timer = new Timer();
 
+    // Пользовательские настройки
+    public static Map<String, String> userSettings = new HashMap<>();
+    public static Map<String, Boolean> userImportSettings = new HashMap<>();
+
     // Соединение с MySQL
     private static int lport;
     private static String rhost;
@@ -62,10 +62,7 @@ public class Controller implements Initializable {
     private static boolean insertCategory = false;
     private static Map<String, String> sqlSelectCategory;
 
-    // Логи
-    public Label infoLogs;
-    public WebView allLogs;
-    public Label logActionResult;
+
 
     @FXML
     public Label preview;
@@ -115,210 +112,9 @@ public class Controller implements Initializable {
     public StackPane checkHtml;
 
 
-    // Проверка полей на заполненность
-    public TextField ftphost;
-    public StackPane ftphostnext;
-    public TextField ftpuser;
-    public StackPane ftpusernext;
-    public PasswordField ftppassword;
-    public StackPane ftppasswordnext;
-    public TextField sshhost;
-    public StackPane sshhostnext;
-    public TextField sshuser;
-    public StackPane sshusernext;
-    public PasswordField sshpassword;
-    public StackPane sshpasswordnext;
-    public TextField sshport;
-    public StackPane sshportnext;
-    public TextField mysqlhost;
-    public StackPane mysqlhostnext;
-    public TextField mysqluser;
-    public StackPane mysqlusernext;
-    public PasswordField mysqlpassword;
-    public StackPane mysqlpasswordnext;
-    public TextField mysqldb;
-    public StackPane mysqldbnext;
-    public TextField imgDir;
-    public StackPane imgDirnext;
-
-    // Настройки импорта
-    public CheckBox requiredH1;
-    public CheckBox requiredUrl;
-    public CheckBox requiredAnons;
-    public CheckBox requiredTitle;
-    public CheckBox requiredDescription;
-    public CheckBox requiredImage;
-    public CheckBox requiredHtml;
-
-
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            Map <TextField, String> userSettings = getCustomSettings();
-            for(TextField key : userSettings.keySet()){
-                key.setText(userSettings.get(key));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Map <CheckBox, String> userCheckSettings = getCustomerCheckedImportSettings();
-            for(CheckBox key : userCheckSettings.keySet()){
-                key.setSelected(Boolean.parseBoolean(userCheckSettings.get(key)));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        checkSettings(new StringBuilder());
-//        try {
-//            infoLogs.setText(Logs.getLogFileSize());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-
-    private ArrayList<TextField> addFields(){
-        return new ArrayList<>(Arrays.asList(ftphost, ftpuser, ftppassword, sshhost, sshuser, sshpassword, sshport, mysqlhost, mysqluser, mysqlpassword, mysqldb, imgDir));
-    }
-
-    private ArrayList<StackPane> addMessage(){
-        return new ArrayList<>(Arrays.asList(ftphostnext, ftpusernext, ftppasswordnext, sshhostnext, sshusernext, sshpasswordnext, sshportnext, mysqlhostnext, mysqlusernext, mysqlpasswordnext, mysqldbnext, imgDirnext));
-    }
-
-    private ArrayList<CheckBox> addCheckedSettings(){
-        return new ArrayList<>(Arrays.asList(requiredH1, requiredUrl, requiredAnons, requiredTitle, requiredDescription, requiredImage, requiredHtml));
-    }
-
-    private Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
-        ArrayList<TextField> fields = addFields();
-        Map<TextField, String> userSettings = new HashMap<>();
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt");
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()){
-            ArrayList<String> tokensArr = new ArrayList<>();
-            String str = sc.nextLine();
-            StringTokenizer st = new StringTokenizer(str, "=");
-            while (st.hasMoreTokens()){
-                tokensArr.add(st.nextToken());
-            }
-
-            for(TextField elem : fields){
-                if(elem.getId().equals(tokensArr.get(0))){
-                    if(tokensArr.size() == 2){
-                        userSettings.put(elem, tokensArr.get(1));
-                    }else {
-                        userSettings.put(elem, "");
-                    }
-                }
-            }
-        }
-        return userSettings;
-    }
-
-    private void saveCustomSettings(String newSettings) throws IOException{ // Запись настроек подключения
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt"));
-        pw.print(newSettings);
-        pw.close();
-        Logs.addLogs("Обновлены настройки");
-    }
-
-    private Map<CheckBox, String> getCustomerCheckedImportSettings() throws IOException { // Получить настройки импорта
-        ArrayList<CheckBox> checksSettings = addCheckedSettings();
-        Map<CheckBox, String> userCheck = new HashMap<>();
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt");
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()){
-            ArrayList<String> tokensArr = new ArrayList<>();
-            String str = sc.nextLine();
-            StringTokenizer st = new StringTokenizer(str, "=");
-            while (st.hasMoreTokens()){
-                tokensArr.add(st.nextToken());
-            }
-            for(CheckBox elem : checksSettings){
-                if(elem.getId().equals(tokensArr.get(0))){
-                    if(tokensArr.size() == 2){
-                        userCheck.put(elem, tokensArr.get(1));
-                    }else {
-                        userCheck.put(elem, "false");
-                    }
-                }
-            }
-        }
-        return userCheck;
-    }
-
-    private void saveCustomerCheckedImportSettings() throws IOException{ // Записать настройки импорта
-        StringBuilder newSettingsOptions = new StringBuilder();
-        ArrayList<CheckBox> listCheck = addCheckedSettings();
-
-        for (CheckBox aListCheck : listCheck) {
-            boolean newSelect = aListCheck.isSelected();
-            aListCheck.setSelected(newSelect);
-            newSettingsOptions.append(aListCheck.getId()).append("=").append(newSelect).append("\n");
-
-        }
-
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt"));
-        pw.print(newSettingsOptions);
-        pw.close();
-        Logs.addLogs("Изменены настройки импорта");
-    }
-
-
-
-    private void checkSettings(StringBuilder newSettings){ // Проверка полей настроек на заполненность
-        ArrayList<TextField> listFields = addFields();
-        ArrayList<StackPane> listMessage = addMessage();
-
-        for(int i = 0; i< listFields.size(); i++){
-            String newText = listFields.get(i).getText();
-            listFields.get(i).setText(newText);
-
-            newSettings.append(listFields.get(i).getId()).append("=").append(newText).append("\n");
-
-            if(listFields.get(i).getText().trim().isEmpty()){
-                try {
-                    Parent error = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
-                    listMessage.get(i).getChildren().clear();
-                    listMessage.get(i).getChildren().addAll(error);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                try {
-                    Parent success = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
-                    listMessage.get(i).getChildren().clear();
-                    listMessage.get(i).getChildren().addAll(success);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-
-    @FXML
-    public void saveSettings() throws IOException { // Проверка заполнения настроек
-        StringBuilder newSettings = new StringBuilder();
-        checkSettings(newSettings);
-        saveCustomSettings(String.valueOf(newSettings));
-        saveCustomerCheckedImportSettings();
-        saveSuccess.setVisible(true);
-        timer.schedule( // Таймер для скрытия уведомлений
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        saveSuccess.setVisible(false);
-                    }
-                }, 500);
-    }
+    public void initialize(URL location, ResourceBundle resources) { }
 
     @FXML
     private void closePublishedTab(){
@@ -327,8 +123,6 @@ public class Controller implements Initializable {
         errors.setText("");
         success.setText("");
     }
-
-
 
     private boolean validateFile(File file){
         ArrayDeque<String> queue = new ArrayDeque<>();
@@ -404,7 +198,6 @@ public class Controller implements Initializable {
         fileUpload.getChildren().clear();
         closePublishedTab();
     }
-
 
 
     // Переключение страниц
@@ -505,18 +298,23 @@ public class Controller implements Initializable {
         return String.format("%tF", date);
     }
 
+    private Map<TextField, String> getCustomSettings()throws IOException{
+        UserSettings userSettings = new UserSettings();
+        return userSettings.getCustomSettings();
+    }
+
 
     @FXML
-    private void connectSSH(){
+    private void connectSSH() throws IOException {
         // Соединение по SSH
         try
         {
             JSch jsch = new JSch();
-            session = jsch.getSession(sshuser.getText(), sshhost.getText(), Integer.valueOf(sshport.getText()));
+            session = jsch.getSession(userSettings.get("sshuser"), userSettings.get("sshhost"), Integer.valueOf(userSettings.get("sshport")));
             lport = 4321;
-            rhost = mysqlhost.getText();
+            rhost = userSettings.get("mysqlhost");
             rport = 3306;
-            session.setPassword(sshpassword.getText());
+            session.setPassword(userSettings.get("sshpassword"));
             session.setConfig("StrictHostKeyChecking", "no");
             System.out.println("Устанавливаю соединение...");
             Logs.addLogs("Устанавливаю соединение...");
@@ -530,20 +328,16 @@ public class Controller implements Initializable {
         }
     }
 
-    private void connectDB(){
-        try{
-            connectSSH();
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
+    private void connectDB() throws IOException {
+        connectSSH();
 
         // Соединение с БД
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://" + rhost +":" + lport + "/";
-        String db = mysqldb.getText();
-        String dbUser = mysqluser.getText();
-        String dbPasswd = mysqlpassword.getText();
+        String db = userSettings.get("mysqldb");
+        String dbUser = userSettings.get("mysqluser");
+        String dbPasswd = userSettings.get("mysqlpassword");
 
         try{
             Class.forName(driver);
@@ -573,7 +367,6 @@ public class Controller implements Initializable {
         insertCategory = false;
         session.disconnect();
     }
-
 
     private void sqlInsertPost(Connection con) throws IOException{
         try{
@@ -610,7 +403,6 @@ public class Controller implements Initializable {
         }
     }
 
-
     private Map<String, String> sqlSelectCategory(Connection con) throws IOException{
         try{
             Statement st = con.createStatement();
@@ -636,7 +428,6 @@ public class Controller implements Initializable {
             return null;
         }
     }
-
 
     private void sqlInsertCategory(Connection con) throws IOException{
         try{
@@ -666,19 +457,16 @@ public class Controller implements Initializable {
         }
     }
 
-
     @FXML
-    public void finishPublication(){
+    public void finishPublication() throws IOException {
         insertPost = true;
         connectDB();
     }
 
     private void assertsFill(){
-        ArrayList<TextField> asserts = addFields();
-        for(TextField field : asserts){
-            if(field.getText().isEmpty()){
+        for(String st : userSettings.keySet()){
+            if(userSettings.get(st).equals("")){
                 assertsServerAndDbIsFill = false;
-                System.out.println(field.getText());
             }
         }
     }
@@ -740,22 +528,22 @@ public class Controller implements Initializable {
                 errors.setText("Не выбрана категория!\nВыберите категорию и повторите попытку.");
             }else{
                 StringBuilder emptyFields = new StringBuilder();
-                if(requiredH1.isSelected() && postH1.getText().isEmpty()){
+                if(userImportSettings.get("requiredH1") && postH1.getText().isEmpty()){
                     emptyFields.append("H1").append(", ");
                 }
-                if(requiredUrl.isSelected() && postUrl.getText().isEmpty()){
+                if(userImportSettings.get("requiredUrl") && postUrl.getText().isEmpty()){
                     emptyFields.append("URL").append(", ");
                 }
-                if(requiredAnons.isSelected() && postAnons.getText().isEmpty()){
+                if(userImportSettings.get("requiredAnons") && postAnons.getText().isEmpty()){
                     emptyFields.append("анонс").append(", ");
                 }
-                if(requiredTitle.isSelected() && postTitle.getText().isEmpty()){
+                if(userImportSettings.get("requiredTitle") && postTitle.getText().isEmpty()){
                     emptyFields.append("title").append(", ");
                 }
-                if(requiredDescription.isSelected() && postDescription.getText().isEmpty()){
+                if(userImportSettings.get("requiredDescription") && postDescription.getText().isEmpty()){
                     emptyFields.append("description").append(", ");
                 }
-                if(requiredHtml.isSelected() && redactorhtml.getText().isEmpty()){
+                if(userImportSettings.get("requiredHtml") && redactorhtml.getText().isEmpty()){
                     emptyFields.append("текст статьи").append(", ");
                 }
                 if(emptyFields.length() == 0){
@@ -784,7 +572,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void getCategory(){
+    public void getCategory() throws IOException {
         assertsFill();
         if(assertsServerAndDbIsFill){
             selectCategory = true;
@@ -797,7 +585,6 @@ public class Controller implements Initializable {
                 item.setToggleGroup(category);
                 item.setText(categoryItemsMap.get(categoryItem));
                 item.setId(categoryItem);
-                //item.setSelected(true);
                 categoryItems.getChildren().add(item);
             }
             errors.setText("");
@@ -829,7 +616,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void addCategorySql(){
+    private void addCategorySql() throws IOException {
         errors.setText("");
         success.setText("");
         if(!categoryName.getText().isEmpty() && !categoryUrl.getText().isEmpty()){
