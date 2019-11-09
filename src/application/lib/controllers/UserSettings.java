@@ -1,7 +1,6 @@
-package application.controller.handlers;
+package application.lib.controllers;
 
-import application.Main;
-import application.controller.Controller;
+import application.lib.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +16,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
 
-public class UserSettings extends Controller {
+public class UserSettings extends MainController {
 
     // Проверка полей на заполненность
     public TextField ftphost;
@@ -99,7 +98,7 @@ public class UserSettings extends Controller {
     }
 
     private Map<String, String> changeCustomSettings(){
-        return Controller.userSettings;
+        return MainController.userSettings;
     }
 
 
@@ -120,7 +119,7 @@ public class UserSettings extends Controller {
                 if(elem.getId().equals(tokensArr.get(0))){
                     if(tokensArr.size() == 2){
                         userSettings.put(elem, tokensArr.get(1));
-                        Controller.userSettings.put(String.valueOf(elem.getId()), tokensArr.get(1));
+                        MainController.userSettings.put(String.valueOf(elem.getId()), tokensArr.get(1));
                     }else {
                         userSettings.put(elem, "");
                     }
@@ -153,7 +152,7 @@ public class UserSettings extends Controller {
                 if(elem.getId().equals(tokensArr.get(0))){
                     if(tokensArr.size() == 2){
                         userCheck.put(elem, tokensArr.get(1));
-                        Controller.userImportSettings.put(String.valueOf(elem.getId()), Boolean.valueOf(tokensArr.get(1)));
+                        MainController.userImportSettings.put(String.valueOf(elem.getId()), Boolean.valueOf(tokensArr.get(1)));
                     }else {
                         userCheck.put(elem, "false");
                     }
@@ -171,7 +170,7 @@ public class UserSettings extends Controller {
             boolean newSelect = aListCheck.isSelected();
             aListCheck.setSelected(newSelect);
             newSettingsOptions.append(aListCheck.getId()).append("=").append(newSelect).append("\n");
-            Controller.userImportSettings.put(aListCheck.getId(), newSelect);
+            MainController.userImportSettings.put(aListCheck.getId(), newSelect);
         }
 
         PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt"));
@@ -189,7 +188,7 @@ public class UserSettings extends Controller {
             listFields.get(i).setText(newText);
 
             newSettings.append(listFields.get(i).getId()).append("=").append(newText).append("\n");
-            Controller.userSettings.put(listFields.get(i).getId(), newText);
+            MainController.userSettings.put(listFields.get(i).getId(), newText);
 
             if(listFields.get(i).getText().trim().isEmpty()){
                 try {

@@ -10,7 +10,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controller.Controller" prefHeight="700">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.lib.MainController" prefHeight="700">
     <MenuBar styleClass="menu" maxWidth="Infinity" maxHeight="Infinity">
         <menus>
             <Menu text="Конвертер">

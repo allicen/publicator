@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controller.handlers.UserSettings">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.lib.controllers.UserSettings">
     <VBox spacing="10" >
         <Text styleClass="title-tab" text="★ Выберите настройки импорта"/>
         <TabPane tabClosingPolicy="UNAVAILABLE">

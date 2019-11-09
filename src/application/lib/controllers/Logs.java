@@ -1,6 +1,6 @@
-package application.controller.handlers;
+package application.lib.controllers;
 
-import application.controller.Controller;
+import application.lib.MainController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.TimerTask;
 
-public class Logs extends Controller {
+public class Logs extends MainController {
     // Логи
     public Label infoLogs;
     public WebView allLogs;

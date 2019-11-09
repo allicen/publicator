@@ -1,8 +1,8 @@
-package application.controller;
+package application.lib;
 
 import application.Main;
-import application.controller.handlers.Logs;
-import application.controller.handlers.UserSettings;
+import application.lib.controllers.Logs;
+import application.lib.controllers.UserSettings;
 import application.parser.MainParserClass;
 import com.jcraft.jsch.JSch;
 
@@ -21,11 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import sun.rmi.runtime.Log;
-
 
 import javax.swing.*;
 import java.io.*;
@@ -38,7 +35,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.Timer;
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
     public static Timer timer = new Timer();
 
     // Пользовательские настройки

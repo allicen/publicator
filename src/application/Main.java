@@ -1,6 +1,6 @@
 package application;
 
-import application.controller.Controller;
+import application.lib.MainController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +43,7 @@ public class Main extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                Controller.timer.cancel();
+                MainController.timer.cancel();
             }
         });
     }
