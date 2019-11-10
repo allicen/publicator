@@ -1,6 +1,7 @@
 package application.parser;
 
 import application.Main;
+import application.lib.classes.PostCount;
 import application.parser.components.*;
 import org.apache.poi.xwpf.usermodel.*;
 import java.io.*;
@@ -57,7 +58,7 @@ public class MainParserClass {
                             potentialTitle.delete(0, TagConstructor.titleH1.get("search").length());
                             postName = String.valueOf(potentialTitle);
                             Main.postH1 = postName;
-                            Main.postUrl = Translit.translitUrl(postName);
+                            Main.postUrl = Translit.translitUrl(postName) + PostCount.getPostCount();
 
                         }else if(potentialTitle.indexOf(TagConstructor.titleH2.get("search")) == 0){ // H2
                             potentialTitle.delete(0, TagConstructor.titleH2.get("search").length());

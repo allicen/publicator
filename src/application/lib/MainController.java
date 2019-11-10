@@ -1,9 +1,7 @@
 package application.lib;
 
 import application.Main;
-import application.lib.classes.ConnectSSH;
-import application.lib.classes.GetDate;
-import application.lib.classes.UserSettingsFill;
+import application.lib.classes.*;
 import application.lib.controllers.Logs;
 import application.parser.MainParserClass;
 
@@ -320,7 +318,7 @@ public class MainController implements Initializable {
         session.disconnect();
     }
 
-    private void sqlInsertPost(Connection con) throws IOException{
+    private void sqlInsertPost(Connection con) throws IOException{ // ПУБЛИКАЦИЯ ЗАПИСИ!
         try{
             Statement st = con.createStatement();
             String today = GetDate.getDate();
@@ -337,7 +335,17 @@ public class MainController implements Initializable {
                     postUrl.getText()+"');";
 
             int update = st.executeUpdate(sql);
-            if(update >= 1){
+
+            if(update >= 1){ // Если статья добавлена
+
+                UploadImages.uploadImages(); // Грузим картинки
+
+                int count = PostCount.count + 1; // Увелчииваем счетчик на 1
+                PostCount.setPostCount(count);
+
+                DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
+
+
                 System.out.println("Информация добавлена");
                 Logs.addLogs("Запись \"" + postH1.getText() + "\" добавлена.\nЗапрос: " + sql);
                 published.setDisable(true);
@@ -349,7 +357,7 @@ public class MainController implements Initializable {
                 System.out.println("Информация не добавлена");
                 Logs.addLogs("Запись \"" + postH1.getText() + "\" не добавлена.\nЗапрос: " + sql);
             }
-        }catch (SQLException s){
+        }catch (Exception s){
             System.out.println("SQL запрос не выполнен - ошибки!");
             Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
         }

@@ -1,7 +1,9 @@
 package application.parser.components;
 
+import application.lib.classes.SetImagesDirectory;
 import application.parser.MainParserClass;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParserCode {
-    public static String getFragmentWithTags(String code, Map linksMap, ArrayList getImages) {
+    public static String getFragmentWithTags(String code, Map linksMap, ArrayList getImages) throws IOException {
         StringBuilder tmp = new StringBuilder();
         char[] codeArray = code.toCharArray();
         StringBuilder tag = new StringBuilder();
@@ -116,10 +118,12 @@ public class ParserCode {
                                 MainParserClass.isBlockquote = true;
                             } else if (tag.toString().equals(TagConstructor.img.get("search"))) {
                                 if (!getImages.isEmpty()) {
+                                    String urlDirectoryImg = SetImagesDirectory.setImagesUrlDirectory() + getImages.get(0);
                                     MainParserClass.out
                                             .append(TagConstructor.paragraph.get("start"))
                                             .append(TagConstructor.img.get("start"))
-                                            .append(getImages.get(0))
+                                            //.append(getImages.get(0))
+                                            .append(urlDirectoryImg)
                                             .append(TagConstructor.img.get("startLoad"))
                                             .append(MainParserClass.postName)
                                             .append(TagConstructor.img.get("startLoadEnd"))

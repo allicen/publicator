@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Images {
     private static final int MAX_WIDTH_IMAGE = 1000; // Максимальная ширина картинки
-    private static final String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
+    public final static String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
 
     private static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type){
         BufferedImage resizeImage = new BufferedImage(width, height, type);
@@ -40,7 +40,7 @@ public class Images {
             int height = (width >= MAX_WIDTH_IMAGE) ? width * imag.getHeight() / imag.getWidth() : imag.getHeight();
             BufferedImage resizeImage = resizeImage(imag, width, height, imag.getType());
             ImageIO.write(resizeImage, formatName, new File(PATH_DIRECTORY_IMG + pic.getFileName()));
-            getImages.add(PATH_DIRECTORY_IMG + pic.getFileName());
+            getImages.add(pic.getFileName());
         }
         Collections.sort(getImages);
         return getImages;
