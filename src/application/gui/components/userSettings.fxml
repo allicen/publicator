@@ -24,15 +24,15 @@
                             <VBox spacing="10">
                                 <HBox spacing="50">
                                     <VBox spacing="5">
-                                        <CheckBox text="Заголовок H1" fx:id="requiredH1" selected="false"/>
-                                        <CheckBox text="URL" fx:id="requiredUrl" selected="false"/>
-                                        <CheckBox text="Анонс" fx:id="requiredAnons" selected="false"/>
-                                        <CheckBox text="Текст в HTML" fx:id="requiredHtml" selected="false"/>
+                                        <CheckBox text="Заголовок H1" fx:id="requiredH1"/>
+                                        <CheckBox text="URL" fx:id="requiredUrl"/>
+                                        <CheckBox text="Анонс" fx:id="requiredAnons"/>
+                                        <CheckBox text="Текст в HTML" fx:id="requiredHtml"/>
                                     </VBox>
                                     <VBox spacing="5">
-                                        <CheckBox text="Title" fx:id="requiredTitle" selected="false"/>
-                                        <CheckBox text="Description" fx:id="requiredDescription" selected="false"/>
-                                        <CheckBox text="Картинка поста" fx:id="requiredImage" selected="false"/>
+                                        <CheckBox text="Title" fx:id="requiredTitle"/>
+                                        <CheckBox text="Description" fx:id="requiredDescription"/>
+                                        <CheckBox text="Картинка поста" fx:id="requiredImage"/>
                                     </VBox>
                                 </HBox>
                             </VBox>
@@ -53,17 +53,17 @@
                         <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="20" maxWidth="3000">
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="FTP Host" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="ftphost"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="ftphost"/>
                                 <StackPane fx:id="ftphostnext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="User" prefWidth="150"/>
-                                <TextField promptText="" HBox.hgrow="ALWAYS" fx:id="ftpuser"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="ftpuser"/>
                                 <StackPane fx:id="ftpusernext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="Password" prefWidth="150"/>
-                                <PasswordField text="" HBox.hgrow="ALWAYS" fx:id="ftppassword"/>
+                                <PasswordField HBox.hgrow="ALWAYS" fx:id="ftppassword"/>
                                 <StackPane fx:id="ftppasswordnext" />
                             </HBox>
                         </VBox>
@@ -76,22 +76,22 @@
                         <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="20" maxWidth="3000">
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="SSH Host" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="sshhost"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="sshhost"/>
                                 <StackPane fx:id="sshhostnext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="User" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="sshuser"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="sshuser"/>
                                 <StackPane fx:id="sshusernext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="Password" prefWidth="150"/>
-                                <PasswordField text="" HBox.hgrow="ALWAYS" fx:id="sshpassword"/>
+                                <PasswordField HBox.hgrow="ALWAYS" fx:id="sshpassword"/>
                                 <StackPane fx:id="sshpasswordnext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="Порт" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="sshport"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="sshport"/>
                                 <StackPane fx:id="sshportnext" />
                             </HBox>
                         </VBox>
@@ -104,22 +104,22 @@
                         <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="20" maxWidth="3000">
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="Host" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="mysqlhost"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="mysqlhost"/>
                                 <StackPane fx:id="mysqlhostnext"/>
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="User" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="mysqluser"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="mysqluser"/>
                                 <StackPane fx:id="mysqlusernext" />
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="Password" prefWidth="150"/>
-                                <PasswordField text="" HBox.hgrow="ALWAYS" fx:id="mysqlpassword"/>
+                                <PasswordField HBox.hgrow="ALWAYS" fx:id="mysqlpassword"/>
                                 <StackPane fx:id="mysqlpasswordnext"/>
                             </HBox>
                             <HBox spacing="10">
                                 <Label styleClass="label-text" text="База данных" prefWidth="150"/>
-                                <TextField text="" HBox.hgrow="ALWAYS" fx:id="mysqldb"/>
+                                <TextField HBox.hgrow="ALWAYS" fx:id="mysqldb"/>
                                 <StackPane fx:id="mysqldbnext"/>
                             </HBox>
                         </VBox>

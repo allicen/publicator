@@ -65,36 +65,20 @@
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="100" spacing="30">
                                             <Text styleClass="title-tab" fontSmoothingType="LCD" underline="false" text="★ Проверьте результат" />
-                                            <Accordion>
-                                                <expandedPane>
-                                                    <TitledPane fx:id="x1" animated="false" text="Текст в HTML">
-                                                        <content>
-                                                            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0">
-                                                                <children>
-                                                                    <ScrollPane AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15" AnchorPane.rightAnchor="25" AnchorPane.leftAnchor="25">
-                                                                        <content>
-                                                                            <Label fx:id="preview" scaleX="1" scaleY="1" text="Нет результатов *" wrapText="true"/>
-                                                                        </content>
-                                                                    </ScrollPane>
-                                                                </children>
-                                                            </AnchorPane>
-                                                        </content>
-                                                    </TitledPane>
-                                                </expandedPane>
-                                                <panes>
-                                                    <TitledPane animated="false" text="Заголовок">
-                                                        <content>
-                                                            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" maxWidth="2000">
-                                                                <children>
-                                                                    <Label fx:id="previewH1" text="Нет результатов *" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15" AnchorPane.rightAnchor="25" AnchorPane.leftAnchor="25" wrapText="true"/>
-                                                                </children>
-                                                            </AnchorPane>
-                                                        </content>
-                                                    </TitledPane>
-                                                    <fx:reference source="x1" />
-                                                </panes>
-                                            </Accordion>
-                                            <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"></Label>
+                                            <VBox>
+                                                <AnchorPane>
+                                                    <HBox AnchorPane.bottomAnchor="10" style="-fx-font-size: 14" spacing="10">
+                                                        <Label text="Заголовок: "/>
+                                                        <Label fx:id="previewH1" style="-fx-font-weight: bold" wrapText="true"/>
+                                                    </HBox>
+                                                </AnchorPane>
+                                                <ScrollPane AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="15" AnchorPane.rightAnchor="25" AnchorPane.leftAnchor="25">
+                                                    <AnchorPane>
+                                                        <Label fx:id="preview" text="Нет результатов *" AnchorPane.topAnchor="15" AnchorPane.bottomAnchor="15" AnchorPane.rightAnchor="25" AnchorPane.leftAnchor="25"/>
+                                                    </AnchorPane>
+                                                </ScrollPane>
+                                            </VBox>
+                                            <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"/>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
                                             <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Править" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#goNext"/>
@@ -106,19 +90,33 @@
                         </Tab>
                         <Tab text="HTML-редактор">
                             <content>
-                                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0">
+                                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" maxHeight="Infinity">
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="100" spacing="30">
                                             <Text styleClass="title-tab" fontSmoothingType="LCD" underline="false" text="★ При необходимости внесите правки" />
-                                            <HTMLEditor fx:id="redactorvisual" htmlText="Нет данных *" maxHeight="500"/>
-                                            <HBox spacing="30" alignment="TOP_CENTER">
+                                            <TabPane tabClosingPolicy="UNAVAILABLE" >
+                                                <Tab text="HTML">
+                                                    <content>
+                                                        <VBox AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="30">
+                                                            <TextArea fx:id="redactorhtml" text="" wrapText="true" prefHeight="2000"/>
+                                                        </VBox>
+                                                    </content>
+                                                </Tab>
+                                                <Tab text="Визуальный редактор">
+                                                    <content>
+                                                        <VBox AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="30">
+                                                            <HTMLEditor fx:id="redactorvisual" htmlText="Нет данных *" prefHeight="2000"/>
+                                                        </VBox>
+                                                    </content>
+                                                </Tab>
+                                            </TabPane>
+                                            <HBox spacing="30" alignment="TOP_CENTER" AnchorPane.topAnchor="30" >
                                                 <Button mnemonicParsing="false" text="В HTML" styleClass="main-btn" prefWidth="250" onAction="#toHtmlButton"/>
                                                 <AnchorPane>
                                                     <Button text="Очистить всё" onAction="#cancelUpload" styleClass="cancel-button" AnchorPane.topAnchor="9"/>
                                                 </AnchorPane>
                                             </HBox>
-                                            <TextArea fx:id="redactorhtml" text="" wrapText="true" />
-                                            <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"></Label>
+                                            <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"/>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
                                             <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Назад" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#goPrev"/>

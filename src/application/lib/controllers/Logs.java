@@ -121,7 +121,4 @@ public class Logs extends MainController {
         }
         return "Размер файла логов: " + size + " bytes";
     }
-
-
-
 }

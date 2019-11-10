@@ -9,8 +9,8 @@ import java.util.*;
 
 public class MainParserClass {
     public static StringBuilder out = new StringBuilder();
-    private static final String NAME_HTML_FILE = "read.html";
-    private static final String PATH_HTML_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\html_file\\";
+    public static final String NAME_HTML_FILE = "read.html";
+    public static final String PATH_HTML_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\html_file\\";
     public static String postName = "";
     public static boolean isBlockquote = false;
 

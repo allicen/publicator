@@ -1,10 +1,11 @@
 package application.lib;
 
 import application.Main;
+import application.lib.classes.ConnectSSH;
+import application.lib.classes.GetDate;
+import application.lib.classes.UserSettingsFill;
 import application.lib.controllers.Logs;
-import application.lib.controllers.UserSettings;
 import application.parser.MainParserClass;
-import com.jcraft.jsch.JSch;
 
 import java.sql.*;
 import com.jcraft.jsch.Session;
@@ -23,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import javax.swing.*;
 import java.io.*;
 import java.net.URL;
@@ -32,8 +32,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.Date;
 import java.util.Timer;
+
+import static application.lib.classes.ValidateFile.validateFile;
 
 public class MainController implements Initializable {
     public static Timer timer = new Timer();
@@ -43,11 +44,8 @@ public class MainController implements Initializable {
     public static Map<String, Boolean> userImportSettings = new HashMap<>();
 
     // Соединение с MySQL
-    private static int lport;
-    private static String rhost;
-    private static int rport;
-    private static Session session = null;
-    private static boolean assertsServerAndDbIsFill = true;
+    public static Session session = null;
+    public static boolean assertsServerAndDbIsFill = true;
 
     private static String categoryId = "-1";
     private static boolean isValidateFile;
@@ -75,13 +73,13 @@ public class MainController implements Initializable {
     public TabPane tabs;
     public VBox settings;
     public VBox showLogs;
+
     public WebView about;
     public WebView manual;
     public WebView faq;
     public WebView feedback;
     public BorderPane main;
     public StackPane fileUpload;
-    public StackPane saveSuccess;
     public Tab tabGoThen;
     public Tab tabPublication;
     public VBox readyInfo;
@@ -108,8 +106,6 @@ public class MainController implements Initializable {
     public StackPane checkImage;
     public StackPane checkHtml;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) { }
 
@@ -121,21 +117,10 @@ public class MainController implements Initializable {
         success.setText("");
     }
 
-    private boolean validateFile(File file){
-        ArrayDeque<String> queue = new ArrayDeque<>();
-        StringTokenizer st = new StringTokenizer(file.getName(), ".");
-        while (st.hasMoreTokens()){
-            queue.addLast(st.nextToken());
-        }
-        return queue.getLast().equals("docx");
-    }
-
-
     // Загрузка файла
     @FXML
     public void upload(){
         fileUpload.getChildren().clear();
-        //closePublishedTab();
         JFileChooser window = new JFileChooser();
         int returnValue = window.showOpenDialog(null);
         if(returnValue == JFileChooser.APPROVE_OPTION){
@@ -183,7 +168,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void cancelUpload(){
-        preview.setText("Нет данных *");
+        preview.setText("Нет данных");
         redactorhtml.setText("");
         redactorvisual.setHtmlText("Нет данных *");
         previewH1.setText("Нет данных *");
@@ -195,7 +180,6 @@ public class MainController implements Initializable {
         fileUpload.getChildren().clear();
         closePublishedTab();
     }
-
 
     // Переключение страниц
     private void navTexts(){
@@ -221,7 +205,7 @@ public class MainController implements Initializable {
     public void settings(){
         navTexts();
         settings.setVisible(true);
-       closePublishedTab();
+        closePublishedTab();
     }
 
     @FXML
@@ -230,8 +214,6 @@ public class MainController implements Initializable {
         showLogs.setVisible(true);
         closePublishedTab();
     }
-
-
 
     @FXML
     public void about(){
@@ -284,54 +266,18 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void toHtmlButton(){
+    public void toHtmlButton() throws FileNotFoundException {
         redactorhtml.setText(redactorvisual.getHtmlText());
         preview.setText(redactorvisual.getHtmlText());
-       closePublishedTab();
-    }
-
-    private String getDate(){
-        Date date = new Date();
-        return String.format("%tF", date);
-    }
-
-    private Map<TextField, String> getCustomSettings()throws IOException{
-        UserSettings userSettings = new UserSettings();
-        return userSettings.getCustomSettings();
-    }
-
-
-    @FXML
-    private void connectSSH() throws IOException {
-        // Соединение по SSH
-        try
-        {
-            JSch jsch = new JSch();
-            session = jsch.getSession(userSettings.get("sshuser"), userSettings.get("sshhost"), Integer.valueOf(userSettings.get("sshport")));
-            lport = 4321;
-            rhost = userSettings.get("mysqlhost");
-            rport = 3306;
-            session.setPassword(userSettings.get("sshpassword"));
-            session.setConfig("StrictHostKeyChecking", "no");
-            System.out.println("Устанавливаю соединение...");
-            Logs.addLogs("Устанавливаю соединение...");
-            session.connect();
-            int assinged_port=session.setPortForwardingL(lport, rhost, rport);
-            System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
-            Logs.addLogs("localhost:"+assinged_port+" -> "+rhost+":"+rport);
-        }
-        catch(Exception e){
-            System.err.print(e);
-        }
+        closePublishedTab();
     }
 
     private void connectDB() throws IOException {
-        connectSSH();
-
+        ConnectSSH.connectSSH();
         // Соединение с БД
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://" + rhost +":" + lport + "/";
+        String url = "jdbc:mysql://" + ConnectSSH.rhost +":" + ConnectSSH.lport + "/";
         String db = userSettings.get("mysqldb");
         String dbUser = userSettings.get("mysqluser");
         String dbPasswd = userSettings.get("mysqlpassword");
@@ -368,7 +314,7 @@ public class MainController implements Initializable {
     private void sqlInsertPost(Connection con) throws IOException{
         try{
             Statement st = con.createStatement();
-            String today = getDate();
+            String today = GetDate.getDate();
             // Запрос к БД
             sql = "INSERT INTO blog_posts (`id`, `h1`, `text`, `anons`, `category_id`, `picture`, `date`, `title`, `description`, `link`) " +
                     "VALUES (NULL, '"+
@@ -414,11 +360,11 @@ public class MainController implements Initializable {
                 String name = rs.getString(2);
                 category.put(id, name);
             }
+            success.setText("Данные получены!"); /// Почему-то не публикуется сообщение!
             System.out.println("Данные получены.");
             Logs.addLogs("Данные "+category+" получены.\nЗапрос: " + sql);
-            success.setText("Данные получены!");
-            return category;
 
+            return category;
         }catch (SQLException s){
             System.out.println("SQL запрос не выполнен - ошибки!");
             Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
@@ -429,7 +375,7 @@ public class MainController implements Initializable {
     private void sqlInsertCategory(Connection con) throws IOException{
         try{
             Statement st = con.createStatement();
-            String today = getDate();
+            String today = GetDate.getDate();
             // Запрос к БД
             sql = "INSERT INTO blog_category (`id`, `link`, `name`, `title`, `description`) VALUES (NULL, '"+
                     categoryUrl.getText()+"', '"+
@@ -454,18 +400,9 @@ public class MainController implements Initializable {
         }
     }
 
-    @FXML
     public void finishPublication() throws IOException {
         insertPost = true;
         connectDB();
-    }
-
-    private void assertsFill(){
-        for(String st : userSettings.keySet()){
-            if(userSettings.get(st).equals("")){
-                assertsServerAndDbIsFill = false;
-            }
-        }
     }
 
     @FXML
@@ -516,7 +453,7 @@ public class MainController implements Initializable {
         checkHtml.getChildren().clear();
         checkHtml.getChildren().addAll(icon);
 
-        assertsFill();
+        UserSettingsFill.assertsFill();
         checkedCategory();
 
         if(assertsServerAndDbIsFill){ // Не добавлена проверка на картинку!!!!!
@@ -570,7 +507,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void getCategory() throws IOException {
-        assertsFill();
+        UserSettingsFill.assertsFill();
         if(assertsServerAndDbIsFill){
             selectCategory = true;
             connectDB();
@@ -617,7 +554,7 @@ public class MainController implements Initializable {
         errors.setText("");
         success.setText("");
         if(!categoryName.getText().isEmpty() && !categoryUrl.getText().isEmpty()){
-            assertsFill();
+            UserSettingsFill.assertsFill();
             if(assertsServerAndDbIsFill){
                 insertCategory = true;
                 connectDB();
@@ -630,5 +567,4 @@ public class MainController implements Initializable {
             errors.setText("Ошибка при добавлении категории!\nНе заполнены обязательные поля.");
         }
     }
-
 }

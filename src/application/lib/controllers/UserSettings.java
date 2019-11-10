@@ -43,6 +43,7 @@ public class UserSettings extends MainController {
     public StackPane mysqldbnext;
     public TextField imgDir;
     public StackPane imgDirnext;
+    public StackPane saveSuccess;
 
     // Настройки импорта
     public CheckBox requiredH1;
@@ -102,7 +103,7 @@ public class UserSettings extends MainController {
     }
 
 
-    public Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
+    private Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
         ArrayList<TextField> fields = addFields();
         Map<TextField, String> userSettings = new HashMap<>();
         FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt");

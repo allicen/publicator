@@ -2,6 +2,8 @@
     -fx-background-color: #fff;
     -fx-font-size: 13;
 }
+
+
 .button, .menu, .menu-item, .tab, .radio-button{
     -fx-cursor: hand;
 }
