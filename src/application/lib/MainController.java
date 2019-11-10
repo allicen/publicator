@@ -3,6 +3,7 @@ package application.lib;
 import application.Main;
 import application.lib.classes.*;
 import application.lib.controllers.Logs;
+import application.lib.classes.UploadMainImage;
 import application.parser.MainParserClass;
 
 import java.sql.*;
@@ -19,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -105,6 +107,10 @@ public class MainController implements Initializable {
     public StackPane checkImage;
     public StackPane checkHtml;
 
+    // Загрузка главной картинки
+    public VBox mainImg;
+    public Text noticeMainImg;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         scrollPreview.setFitToWidth(true);
@@ -179,6 +185,8 @@ public class MainController implements Initializable {
         postTitle.setText("");
         postDescription.setText("");
         fileUpload.getChildren().clear();
+        mainImg.getChildren().clear();
+        noticeMainImg.setText("");
         closePublishedTab();
     }
 
@@ -328,7 +336,8 @@ public class MainController implements Initializable {
                     postH1.getText()+"', '"+
                     redactorhtml.getText()+"', '"+
                     postAnons.getText()+"', '"+
-                    categoryId+"', '', '"+
+                    categoryId+"', '"+
+                    SetImagesDirectory.setImagesUrlDirectory() + Main.postImage+"', '"+
                     today+"', '"+
                     postTitle.getText()+"', '"+
                     postDescription.getText()+"', '"+
@@ -343,8 +352,8 @@ public class MainController implements Initializable {
                 int count = PostCount.count + 1; // Увелчииваем счетчик на 1
                 PostCount.setPostCount(count);
 
-                DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
-
+                Clear.clear();
+                cancelUpload();
 
                 System.out.println("Информация добавлена");
                 Logs.addLogs("Запись \"" + postH1.getText() + "\" добавлена.\nЗапрос: " + sql);
@@ -352,6 +361,10 @@ public class MainController implements Initializable {
                 readyInfo.setVisible(false);
                 success.setText("Статья успешно добавлена!");
                 success.setStyle("-fx-font-size: 16");
+               // System.out.println("====");
+               // System.out.println(Thread.getAllStackTraces().keySet());
+               // System.out.println("====");
+                DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
             }
             else{
                 System.out.println("Информация не добавлена");
@@ -467,13 +480,23 @@ public class MainController implements Initializable {
         }else {
             icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
         }
+
         checkHtml.getChildren().clear();
         checkHtml.getChildren().addAll(icon);
+
+        if(Main.postImage.isEmpty()){
+            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
+        }else {
+            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
+        }
+        checkImage.getChildren().clear();
+        checkImage.getChildren().addAll(icon);
+
 
         UserSettingsFill.assertsFill();
         checkedCategory();
 
-        if(assertsServerAndDbIsFill){ // Не добавлена проверка на картинку!!!!!
+        if(assertsServerAndDbIsFill){
             if(categoryId.equals("-1")){
                 published.setDisable(true);
                 errors.setText("Не выбрана категория!\nВыберите категорию и повторите попытку.");
@@ -496,6 +519,9 @@ public class MainController implements Initializable {
                 }
                 if(userImportSettings.get("requiredHtml") && redactorhtml.getText().isEmpty()){
                     emptyFields.append("текст статьи").append(", ");
+                }
+                if(userImportSettings.get("requiredImage") && Main.postImage.isEmpty()){
+                    emptyFields.append("главная картинка").append(", ");
                 }
                 if(emptyFields.length() == 0){
                     published.setDisable(false);
@@ -584,4 +610,22 @@ public class MainController implements Initializable {
             errors.setText("Ошибка при добавлении категории!\nНе заполнены обязательные поля.");
         }
     }
+
+    @FXML
+    public void selectMainImages() {
+        mainImg.getChildren().clear();
+        UploadMainImage uploadMainImage = new UploadMainImage();
+        uploadMainImage.selectMainImages();
+        if(UploadMainImage.mainImgUploaded){
+            noticeMainImg.setText("Выбран файл " + Main.postImage);
+            noticeMainImg.setStyle("-fx-fill: green");
+            mainImg.getChildren().add(UploadMainImage.imageView);
+        }else {
+            noticeMainImg.setText("Выбран файл неверного формата!");
+            noticeMainImg.setStyle("-fx-fill: red");
+        }
+    }
+
 }
+
+

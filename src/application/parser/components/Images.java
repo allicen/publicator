@@ -17,8 +17,10 @@ import java.util.List;
 public class Images {
     private static final int MAX_WIDTH_IMAGE = 1000; // Максимальная ширина картинки
     public final static String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
+    public static BufferedImage resizeImage;
+    public static BufferedImage imag;
 
-    private static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type){
+    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type){
         BufferedImage resizeImage = new BufferedImage(width, height, type);
         Graphics2D graphics = resizeImage.createGraphics();
         graphics.drawImage(originalImage, 0, 0, width, height, null);
@@ -30,19 +32,22 @@ public class Images {
         ArrayList<String> getImages = new ArrayList<>();
         List<XWPFPictureData> piclist = document.getAllPictures(); // Картинки
         Iterator<XWPFPictureData> iterator = piclist.iterator();
-        int i = 0;
         while(iterator.hasNext()){
             XWPFPictureData pic = iterator.next();
             byte[] bytepic = pic.getData();
-            BufferedImage imag =  ImageIO.read(new ByteArrayInputStream(bytepic));
+            imag =  ImageIO.read(new ByteArrayInputStream(bytepic));
             String formatName = pic.suggestFileExtension();
-            int width = (imag.getWidth() > MAX_WIDTH_IMAGE) ? MAX_WIDTH_IMAGE : imag.getWidth(); // Пересчет размеров
-            int height = (width >= MAX_WIDTH_IMAGE) ? width * imag.getHeight() / imag.getWidth() : imag.getHeight();
-            BufferedImage resizeImage = resizeImage(imag, width, height, imag.getType());
+            changeImages();
             ImageIO.write(resizeImage, formatName, new File(PATH_DIRECTORY_IMG + pic.getFileName()));
             getImages.add(pic.getFileName());
         }
         Collections.sort(getImages);
         return getImages;
+    }
+
+    public static void changeImages(){
+        int width = (imag.getWidth() > MAX_WIDTH_IMAGE) ? MAX_WIDTH_IMAGE : imag.getWidth(); // Пересчет размеров
+        int height = (width >= MAX_WIDTH_IMAGE) ? width * imag.getHeight() / imag.getWidth() : imag.getHeight();
+        resizeImage = resizeImage(imag, width, height, imag.getType());
     }
 }

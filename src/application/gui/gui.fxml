@@ -170,10 +170,13 @@
                                                 <HBox HBox.hgrow="ALWAYS">
                                                     <Label styleClass="label-text" text="Картинка поста" prefWidth="150"/>
                                                     <VBox>
-                                                        <Button mnemonicParsing="false" text="Выбрать файл"/>
+                                                        <HBox spacing="20">
+                                                            <Button mnemonicParsing="false" text="Выбрать файл" onAction="#selectMainImages"/>
+                                                            <Text fx:id="noticeMainImg"/>
+                                                        </HBox>
                                                         <Label wrapText="true" styleClass="notice" text="Выберите файл формата .jpg, .jpeg, .png, .gif" />
+                                                        <VBox fx:id="mainImg"/>
                                                     </VBox>
-
                                                 </HBox>
                                             </VBox>
                                         </VBox>

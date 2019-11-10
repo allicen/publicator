@@ -32,7 +32,7 @@ public class UploadImages{
 
     private UploadImages(String host, String user, String pwd) throws Exception{
         ftp = new FTPClient();
-        ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out))); // Вывод подробного состояния загрузки
+        //ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out))); // Вывод подробного состояния загрузки
         int reply;
         ftp.connect(host);
         reply = ftp.getReplyCode();
