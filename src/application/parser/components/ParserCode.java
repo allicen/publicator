@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParserCode {
-    public static String getFragmentWithTags(String code, Map linksMap, ArrayList getImages) { // Собственно сам парсер
+    public static String getFragmentWithTags(String code, Map linksMap, ArrayList getImages) {
         StringBuilder tmp = new StringBuilder();
         char[] codeArray = code.toCharArray();
         StringBuilder tag = new StringBuilder();

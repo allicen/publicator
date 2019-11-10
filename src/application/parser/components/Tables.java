@@ -52,8 +52,7 @@ public class Tables {
                 isHeader = false;
             }
             tableConstructor
-                    .append(TagConstructor.table.get("end"))
-                    .append("\n");
+                    .append(TagConstructor.table.get("end"));
             codeTableCell.add(String.valueOf(tableConstructor));
             tableConstructor.delete(0, tableConstructor.length());
         }

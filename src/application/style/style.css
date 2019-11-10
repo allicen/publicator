@@ -118,6 +118,10 @@
     -fx-text-fill: #be2121;
 }
 
+.preview-scroll{
+    -fx-padding: 20;
+}
+
 
 
 

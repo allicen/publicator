@@ -11,9 +11,9 @@ public class TagConstructor {
     static Map<String, String> link = new HashMap<>();
     public static Map<String, String> quote = new HashMap<>(); // Будет тег курсива для блока цитирования
     public static Map<String, String> table = new HashMap<>();
-    static Map<String, String> tableTitle = new HashMap<>();
-    static Map<String, String> tableRow = new HashMap<>();
-    static Map<String, String> tableCell = new HashMap<>();
+    public static Map<String, String> tableTitle = new HashMap<>();
+    public static Map<String, String> tableRow = new HashMap<>();
+    public static Map<String, String> tableCell = new HashMap<>();
     public static Map<String, String> paragraph = new HashMap<>();
     public static Map<String, String> bullet = new HashMap<>();
     public static Map<String, String> numeric = new HashMap<>();

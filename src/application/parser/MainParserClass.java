@@ -19,11 +19,6 @@ public class MainParserClass {
             TagConstructor.tagsConstructor ();
             Translit.translitUrlConstructor();
 
-
-//            FileInputStream file = new FileInputStream(new File("sample.docx"));
-//            XWPFDocument document = new XWPFDocument(file);
-//
-
             Map linksMap = GetFragmentsDocx.getLinks(document); // Получить все ссылки
             ArrayDeque tableOrParagraph = GetFragmentsDocx.getTypeFragment(document); // Получаем тип элемента - таблица или параграф
             ArrayDeque typeParagraph = GetFragmentsDocx.getTypeParagraph(document); // Получаем тип параграфа - абзац или список
@@ -60,11 +55,6 @@ public class MainParserClass {
 
                         if(potentialTitle.indexOf(TagConstructor.titleH1.get("search")) == 0){ // H1
                             potentialTitle.delete(0, TagConstructor.titleH1.get("search").length());
-
-//                            out.append(TagConstructor.titleH1.get("start"))
-//                                .append(potentialTitle)
-//                                .append(TagConstructor.titleH1.get("end"));
-
                             postName = String.valueOf(potentialTitle);
                             Main.postH1 = postName;
                             Main.postUrl = Translit.translitUrl(postName);
@@ -160,7 +150,8 @@ public class MainParserClass {
                 tableOrParagraph.removeFirst();
             }
 
-            String result = String.valueOf(out).replaceAll("[\\s]{2,}", " ")
+            String result = String.valueOf(out)
+                    .replaceAll("[\\s]{2,}", " ")
                     .replaceAll("> <", "><")
                     .replaceAll("<sub></sub>", "")
                     .replaceAll("<sup></sup>", "")
@@ -174,6 +165,28 @@ public class MainParserClass {
                     .replaceAll(TagConstructor.titleH2.get("end"), TagConstructor.titleH2.get("end") + "\n")
                     .replaceAll(TagConstructor.titleH3.get("end"), TagConstructor.titleH3.get("end") + "\n")
                     .replaceAll(TagConstructor.list.get("end"), TagConstructor.list.get("end") + "\n");
+
+            // Добавлнение табуляции
+            result = result
+                    .replaceAll(TagConstructor.paragraph.get("start"),TagConstructor.paragraph.get("start") + "\n\t")
+                    .replaceAll(TagConstructor.paragraph.get("end"), "\n" + TagConstructor.paragraph.get("end"))
+                    .replaceAll(TagConstructor.quote.get("start"), TagConstructor.quote.get("start") + "\n\t")
+                    .replaceAll(TagConstructor.quote.get("end"), "\n" + TagConstructor.quote.get("end"))
+                    .replaceAll(TagConstructor.bullet.get("start"), TagConstructor.bullet.get("start") + "\n")
+                    .replaceAll(TagConstructor.bullet.get("end"), TagConstructor.bullet.get("end"))
+                    .replaceAll(TagConstructor.numeric.get("start"), TagConstructor.numeric.get("start") + "\n")
+                    .replaceAll(TagConstructor.numeric.get("end"), TagConstructor.numeric.get("end"))
+                    .replaceAll(TagConstructor.list.get("start"), "\t" + TagConstructor.list.get("start"))
+                    .replaceAll(TagConstructor.list.get("end"), TagConstructor.list.get("end"))
+                    .replaceAll(TagConstructor.table.get("start"), "<table>\n\t<tbody>\n")
+                    .replaceAll(TagConstructor.table.get("end"), "\t</tbody>\n</table>")
+                    .replaceAll(TagConstructor.tableRow.get("start"), "\t\t" + TagConstructor.tableRow.get("start") + "\n")
+                    .replaceAll(TagConstructor.tableRow.get("end"), "\t\t" + TagConstructor.tableRow.get("end"))
+                    .replaceAll(TagConstructor.tableTitle.get("start"), "\t\t\t" + TagConstructor.tableTitle.get("start"))
+                    .replaceAll(TagConstructor.tableTitle.get("end"), TagConstructor.tableTitle.get("end"))
+                    .replaceAll(TagConstructor.tableCell.get("start"), "\t\t\t" + TagConstructor.tableCell.get("start"))
+                    .replaceAll(TagConstructor.tableCell.get("end"), TagConstructor.tableCell.get("end"))
+            ;
 
             PrintWriter pw = new PrintWriter(new File(PATH_HTML_FILE + NAME_HTML_FILE));
             Main.html = result;

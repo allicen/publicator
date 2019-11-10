@@ -62,6 +62,7 @@ public class MainController implements Initializable {
     @FXML
     public Label preview;
     public Label previewH1;
+    public ScrollPane scrollPreview;
     public TextArea redactorhtml;
     public HTMLEditor redactorvisual;
     public TextField postH1;
@@ -107,7 +108,9 @@ public class MainController implements Initializable {
     public StackPane checkHtml;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {
+        scrollPreview.setFitToWidth(true);
+    }
 
     @FXML
     private void closePublishedTab(){
@@ -270,6 +273,12 @@ public class MainController implements Initializable {
         redactorhtml.setText(redactorvisual.getHtmlText());
         preview.setText(redactorvisual.getHtmlText());
         closePublishedTab();
+    }
+
+    @FXML
+    public void fromHtmlButton(){
+        redactorvisual.setHtmlText(redactorhtml.getText());
+        preview.setText(redactorvisual.getHtmlText());
     }
 
     private void connectDB() throws IOException {
