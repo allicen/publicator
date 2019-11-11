@@ -11,4 +11,11 @@ public class DeleteImgFiles {
             }
         }
     }
+    static void deleteOldImgFolder(String path) {
+        for (File myFile : Objects.requireNonNull(new File(path).listFiles())){
+            if(myFile.getName().equals(UploadMainImage.fileName)){
+                if (myFile.isFile()) myFile.delete();
+            }
+        }
+    }
 }

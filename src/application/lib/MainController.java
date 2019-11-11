@@ -7,6 +7,8 @@ import application.lib.classes.UploadMainImage;
 import application.parser.MainParserClass;
 
 import java.sql.*;
+
+import application.parser.components.Images;
 import com.jcraft.jsch.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -34,6 +38,7 @@ import java.sql.Statement;
 import java.util.*;
 import java.util.Timer;
 
+import static application.lib.classes.UploadMainImage.imageView;
 import static application.lib.classes.ValidateFile.validateFile;
 
 public class MainController implements Initializable {
@@ -47,6 +52,7 @@ public class MainController implements Initializable {
     public static Session session = null;
     public static boolean assertsServerAndDbIsFill = true;
 
+    // Проверка файла и выбора категории
     private static String categoryId = "-1";
     private static boolean isValidateFile;
 
@@ -56,8 +62,6 @@ public class MainController implements Initializable {
     private static boolean selectCategory = false;
     private static boolean insertCategory = false;
     private static Map<String, String> sqlSelectCategory;
-
-
 
     @FXML
     public Label preview;
@@ -124,9 +128,8 @@ public class MainController implements Initializable {
         success.setText("");
     }
 
-    // Загрузка файла
     @FXML
-    public void upload(){
+    public void upload(){ // Загрузка файла
         fileUpload.getChildren().clear();
         JFileChooser window = new JFileChooser();
         int returnValue = window.showOpenDialog(null);
@@ -174,7 +177,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void cancelUpload(){
+    public void cancelUpload(){ // Сброс загрузки файла
         preview.setText("Нет данных");
         redactorhtml.setText("");
         redactorvisual.setHtmlText("Нет данных *");
@@ -190,8 +193,7 @@ public class MainController implements Initializable {
         closePublishedTab();
     }
 
-    // Переключение страниц
-    private void navTexts(){
+    private void navTexts(){ // Переключение страниц
         text.setVisible(true);
         tabs.setVisible(false);
         settings.setVisible(false);
@@ -361,9 +363,6 @@ public class MainController implements Initializable {
                 readyInfo.setVisible(false);
                 success.setText("Статья успешно добавлена!");
                 success.setStyle("-fx-font-size: 16");
-               // System.out.println("====");
-               // System.out.println(Thread.getAllStackTraces().keySet());
-               // System.out.println("====");
                 DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
             }
             else{
@@ -612,20 +611,23 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void selectMainImages() {
+    public void selectMainImages() throws IOException {
         mainImg.getChildren().clear();
         UploadMainImage uploadMainImage = new UploadMainImage();
         uploadMainImage.selectMainImages();
         if(UploadMainImage.mainImgUploaded){
             noticeMainImg.setText("Выбран файл " + Main.postImage);
             noticeMainImg.setStyle("-fx-fill: green");
-            mainImg.getChildren().add(UploadMainImage.imageView);
+            FileInputStream fileInputStream = new FileInputStream(Images.PATH_DIRECTORY_IMG + UploadMainImage.fileName);
+            Image printImg = new Image(fileInputStream);
+            imageView = new ImageView(printImg);
+            imageView.setFitWidth(UploadMainImage.MAX_WIDTH_PREVIEW);
+            imageView.setFitHeight(UploadMainImage.height * UploadMainImage.MAX_WIDTH_PREVIEW / UploadMainImage.width);
+            mainImg.getChildren().add(imageView);
+            fileInputStream.close();
         }else {
             noticeMainImg.setText("Выбран файл неверного формата!");
             noticeMainImg.setStyle("-fx-fill: red");
         }
     }
-
 }
-
-
