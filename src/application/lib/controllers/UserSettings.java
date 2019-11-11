@@ -18,9 +18,9 @@ import java.util.*;
 
 public class UserSettings extends MainController {
 
-    private static final String USER_SETTINGS_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt";
-    private static final String USER_OPTIONS_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt";
-    private Logs logs = new Logs();
+    private static final String USER_SETTINGS_FILE = "../../user_settings/settings.txt";
+    private static final String USER_OPTIONS_FILE = "../../user_settings/selectedOptions.txt";
+    private static Logs logs = new Logs();
 
     // Проверка полей на заполненность
     public TextField ftphost;
@@ -110,7 +110,7 @@ public class UserSettings extends MainController {
     private Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
         ArrayList<TextField> fields = addFields();
         Map<TextField, String> userSettings = new HashMap<>();
-        FileReader file = new FileReader(USER_SETTINGS_FILE);
+        FileReader file = new FileReader(getClass().getResource(USER_SETTINGS_FILE).getPath());
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -135,7 +135,7 @@ public class UserSettings extends MainController {
     }
 
     private void saveCustomSettings(String newSettings) throws IOException{ // Запись настроек подключения
-        PrintWriter pw = new PrintWriter(new File(USER_SETTINGS_FILE));
+        PrintWriter pw = new PrintWriter(new File(getClass().getResource(USER_SETTINGS_FILE).getPath()));
         pw.print(newSettings);
         pw.close();
         logs.addLogs("Обновлены настройки");
@@ -144,7 +144,7 @@ public class UserSettings extends MainController {
     private Map<CheckBox, String> getCustomerCheckedImportSettings() throws IOException { // Получить настройки импорта
         ArrayList<CheckBox> checksSettings = addCheckedSettings();
         Map<CheckBox, String> userCheck = new HashMap<>();
-        FileReader file = new FileReader(USER_OPTIONS_FILE);
+        FileReader file = new FileReader(getClass().getResource(USER_OPTIONS_FILE).getPath());
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -178,7 +178,7 @@ public class UserSettings extends MainController {
             MainController.userImportSettings.put(aListCheck.getId(), newSelect);
         }
 
-        PrintWriter pw = new PrintWriter(new File(USER_OPTIONS_FILE));
+        PrintWriter pw = new PrintWriter(new File(getClass().getResource(USER_OPTIONS_FILE).getPath()));
         pw.print(newSettingsOptions);
         pw.close();
         logs.addLogs("Изменены настройки импорта");

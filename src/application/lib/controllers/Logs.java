@@ -16,7 +16,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Logs extends MainController {
-    private static final String LOGS_PATH = "E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt";
+    private static final String LOGS_PATH = "../../logs/logs.txt";
+    private static final String LOGS_PATH_ = "E:\\JAVA\\FX\\publicator\\out\\production\\publicator\\application\\logs\\logs.txt";
 
     // Логи
     public Label infoLogs;
@@ -37,7 +38,7 @@ public class Logs extends MainController {
         String today = String.format("%tF %tT", date, date);
         text = today + "\n" + text + "\n\n";
         try {
-            Files.write(Paths.get(LOGS_PATH), text.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(LOGS_PATH_), text.getBytes(), StandardOpenOption.APPEND);
         }
         catch (IOException e) {
             System.out.println(e);
@@ -49,7 +50,7 @@ public class Logs extends MainController {
 
         StringBuilder content = new StringBuilder();
 
-        FileReader file = new FileReader(LOGS_PATH);
+        FileReader file = new FileReader(getClass().getResource(LOGS_PATH).getPath());
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             content.append(sc.nextLine()).append("<br>");
@@ -71,7 +72,7 @@ public class Logs extends MainController {
 
     @FXML
     private void deleteLogs() throws IOException {
-        PrintWriter pw = new PrintWriter(new File(LOGS_PATH));
+        PrintWriter pw = new PrintWriter(new File(getClass().getResource(LOGS_PATH).getPath()));
         pw.print("");
         pw.close();
         getLogs();
@@ -109,7 +110,7 @@ public class Logs extends MainController {
 
     @FXML
     private String getLogFileSize() throws IOException {
-        File logFile = new File(LOGS_PATH);
+        File logFile = new File(getClass().getResource(LOGS_PATH).getPath());
         String size = "";
         if(logFile.exists()){
             size = String.valueOf(logFile.length());

@@ -4,13 +4,13 @@ import java.io.*;
 import java.util.Scanner;
 
 public class PostCount {
-    private static final String FILE_DIRECTORY = "E:\\JAVA\\FX\\publicator\\src\\application\\logs\\postCount.txt";
+    private static final String FILE_DIRECTORY = "../../logs/postCount.txt";
     public static int count = 1;
 
     public int getPostCount() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(FILE_DIRECTORY));
+        BufferedReader br = new BufferedReader(new FileReader(getClass().getResource(FILE_DIRECTORY).getPath()));
         if (br.readLine() != null) {
-            FileReader file = new FileReader(FILE_DIRECTORY);
+            FileReader file = new FileReader(getClass().getResource(FILE_DIRECTORY).getPath());
             Scanner sc = new Scanner(file);
             count = sc.nextInt();
         }
@@ -18,7 +18,7 @@ public class PostCount {
     }
 
     public void setPostCount(int count) throws IOException {
-        PrintWriter pw = new PrintWriter(new File(FILE_DIRECTORY));
+        PrintWriter pw = new PrintWriter(new File(getClass().getResource(FILE_DIRECTORY).getPath()));
         pw.print(String.valueOf(count));
         pw.close();
     }
