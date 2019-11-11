@@ -31,6 +31,7 @@
 
 .notice{
     -fx-text-fill: #888;
+    -fx-padding: 0 0 20 0;
 }
 
 .label-text{

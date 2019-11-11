@@ -13,12 +13,11 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Logs extends MainController {
+    private static final String LOGS_PATH = "E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt";
+
     // Логи
     public Label infoLogs;
     public WebView allLogs;
@@ -33,13 +32,12 @@ public class Logs extends MainController {
     }
 
     // Запись логов
-    public static void addLogs(String text) throws IOException {
-        String filePath = "E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt";
+    public void addLogs(String text) throws IOException {
         Date date = new Date();
         String today = String.format("%tF %tT", date, date);
         text = today + "\n" + text + "\n\n";
         try {
-            Files.write(Paths.get(filePath), text.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(LOGS_PATH), text.getBytes(), StandardOpenOption.APPEND);
         }
         catch (IOException e) {
             System.out.println(e);
@@ -51,7 +49,7 @@ public class Logs extends MainController {
 
         StringBuilder content = new StringBuilder();
 
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt");
+        FileReader file = new FileReader(LOGS_PATH);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             content.append(sc.nextLine()).append("<br>");
@@ -73,7 +71,7 @@ public class Logs extends MainController {
 
     @FXML
     private void deleteLogs() throws IOException {
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt"));
+        PrintWriter pw = new PrintWriter(new File(LOGS_PATH));
         pw.print("");
         pw.close();
         getLogs();
@@ -110,8 +108,8 @@ public class Logs extends MainController {
     }
 
     @FXML
-    private static String getLogFileSize() throws IOException {
-        File logFile = new File("E:\\JAVA\\FX\\publicator\\src\\application\\logs\\logs.txt");
+    private String getLogFileSize() throws IOException {
+        File logFile = new File(LOGS_PATH);
         String size = "";
         if(logFile.exists()){
             size = String.valueOf(logFile.length());

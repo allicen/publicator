@@ -17,8 +17,8 @@ import java.util.List;
 public class Images {
     private static final int MAX_WIDTH_IMAGE = 1000; // Максимальная ширина картинки
     public final static String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
-    public static BufferedImage resizeImage;
-    public static BufferedImage imag;
+    private static BufferedImage resizeImage;
+    private static BufferedImage imag;
 
     public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type){
         BufferedImage resizeImage = new BufferedImage(width, height, type);
@@ -31,11 +31,9 @@ public class Images {
     public static ArrayList<String> getAllImages(XWPFDocument document) throws IOException { // ВАЖНО!!! Все картинки должны быть разными!!! Копии одной и той же картинки не поддерживаются
         ArrayList<String> getImages = new ArrayList<>();
         List<XWPFPictureData> piclist = document.getAllPictures(); // Картинки
-        Iterator<XWPFPictureData> iterator = piclist.iterator();
-        while(iterator.hasNext()){
-            XWPFPictureData pic = iterator.next();
+        for (XWPFPictureData pic : piclist) {
             byte[] bytepic = pic.getData();
-            imag =  ImageIO.read(new ByteArrayInputStream(bytepic));
+            imag = ImageIO.read(new ByteArrayInputStream(bytepic));
             String formatName = pic.suggestFileExtension();
             changeImages();
             ImageIO.write(resizeImage, formatName, new File(PATH_DIRECTORY_IMG + pic.getFileName()));
@@ -45,7 +43,7 @@ public class Images {
         return getImages;
     }
 
-    public static void changeImages(){
+    private static void changeImages(){
         int width = (imag.getWidth() > MAX_WIDTH_IMAGE) ? MAX_WIDTH_IMAGE : imag.getWidth(); // Пересчет размеров
         int height = (width >= MAX_WIDTH_IMAGE) ? width * imag.getHeight() / imag.getWidth() : imag.getHeight();
         resizeImage = resizeImage(imag, width, height, imag.getType());

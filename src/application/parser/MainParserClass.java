@@ -10,8 +10,8 @@ import java.util.*;
 
 public class MainParserClass {
     public static StringBuilder out = new StringBuilder();
-    public static final String NAME_HTML_FILE = "read.html";
-    public static final String PATH_HTML_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\html_file\\";
+    private static final String NAME_HTML_FILE = "read.html";
+    private static final String PATH_HTML_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\html_file\\";
     public static String postName = "";
     public static boolean isBlockquote = false;
 
@@ -56,9 +56,10 @@ public class MainParserClass {
 
                         if(potentialTitle.indexOf(TagConstructor.titleH1.get("search")) == 0){ // H1
                             potentialTitle.delete(0, TagConstructor.titleH1.get("search").length());
+                            PostCount postCount = new PostCount();
                             postName = String.valueOf(potentialTitle);
                             Main.postH1 = postName;
-                            Main.postUrl = Translit.translitUrl(postName) + PostCount.getPostCount();
+                            Main.postUrl = Translit.translitUrl(postName) + postCount.getPostCount();
 
                         }else if(potentialTitle.indexOf(TagConstructor.titleH2.get("search")) == 0){ // H2
                             potentialTitle.delete(0, TagConstructor.titleH2.get("search").length());

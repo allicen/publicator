@@ -18,6 +18,10 @@ import java.util.*;
 
 public class UserSettings extends MainController {
 
+    private static final String USER_SETTINGS_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt";
+    private static final String USER_OPTIONS_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt";
+    private Logs logs = new Logs();
+
     // Проверка полей на заполненность
     public TextField ftphost;
     public StackPane ftphostnext;
@@ -106,7 +110,7 @@ public class UserSettings extends MainController {
     private Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
         ArrayList<TextField> fields = addFields();
         Map<TextField, String> userSettings = new HashMap<>();
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt");
+        FileReader file = new FileReader(USER_SETTINGS_FILE);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -131,16 +135,16 @@ public class UserSettings extends MainController {
     }
 
     private void saveCustomSettings(String newSettings) throws IOException{ // Запись настроек подключения
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\settings.txt"));
+        PrintWriter pw = new PrintWriter(new File(USER_SETTINGS_FILE));
         pw.print(newSettings);
         pw.close();
-        Logs.addLogs("Обновлены настройки");
+        logs.addLogs("Обновлены настройки");
     }
 
     private Map<CheckBox, String> getCustomerCheckedImportSettings() throws IOException { // Получить настройки импорта
         ArrayList<CheckBox> checksSettings = addCheckedSettings();
         Map<CheckBox, String> userCheck = new HashMap<>();
-        FileReader file = new FileReader("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt");
+        FileReader file = new FileReader(USER_OPTIONS_FILE);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -174,10 +178,10 @@ public class UserSettings extends MainController {
             MainController.userImportSettings.put(aListCheck.getId(), newSelect);
         }
 
-        PrintWriter pw = new PrintWriter(new File("E:\\JAVA\\FX\\publicator\\src\\application\\user_settings\\selectedOptions.txt"));
+        PrintWriter pw = new PrintWriter(new File(USER_OPTIONS_FILE));
         pw.print(newSettingsOptions);
         pw.close();
-        Logs.addLogs("Изменены настройки импорта");
+        logs.addLogs("Изменены настройки импорта");
     }
 
     private void checkSettings(StringBuilder newSettings) throws IOException { // Проверка полей настроек на заполненность
@@ -213,8 +217,6 @@ public class UserSettings extends MainController {
         }
     }
 
-
-
     @FXML
     public void saveSettings() throws IOException { // Проверка заполнения настроек
         StringBuilder newSettings = new StringBuilder();
@@ -230,7 +232,4 @@ public class UserSettings extends MainController {
                     }
                 }, 500);
     }
-
 }
-
-

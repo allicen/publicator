@@ -43,6 +43,8 @@ import static application.lib.classes.ValidateFile.validateFile;
 
 public class MainController implements Initializable {
     public static Timer timer = new Timer();
+    private static Logs logs = new Logs();
+    public PostCount postCount = new PostCount();
 
     // Пользовательские настройки
     public static Map<String, String> userSettings = new HashMap<>();
@@ -121,14 +123,6 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void closePublishedTab(){
-        published.setDisable(true);
-        readyInfo.setVisible(false);
-        errors.setText("");
-        success.setText("");
-    }
-
-    @FXML
     public void upload(){ // Загрузка файла
         fileUpload.getChildren().clear();
         JFileChooser window = new JFileChooser();
@@ -138,7 +132,7 @@ public class MainController implements Initializable {
             try {
                 File file = window.getSelectedFile();
                 isValidateFile = validateFile(file);
-                Logs.addLogs("Выбран файл " + file.getName());
+                logs.addLogs("Выбран файл " + file.getName());
                 if(isValidateFile){
                     FileInputStream getFile = new FileInputStream(file);
                     document = new XWPFDocument(getFile);
@@ -193,6 +187,14 @@ public class MainController implements Initializable {
         closePublishedTab();
     }
 
+    @FXML
+    private void closePublishedTab(){
+        published.setDisable(true);
+        readyInfo.setVisible(false);
+        errors.setText("");
+        success.setText("");
+    }
+
     private void navTexts(){ // Переключение страниц
         text.setVisible(true);
         tabs.setVisible(false);
@@ -203,7 +205,6 @@ public class MainController implements Initializable {
         feedback.setVisible(false);
         showLogs.setVisible(false);
     }
-
 
     @FXML
     public void converter(){
@@ -231,7 +232,7 @@ public class MainController implements Initializable {
         navTexts();
         about.setVisible(true);
         about.getEngine().load(getClass().getResource("../template_html/about.html").toExternalForm());
-       closePublishedTab();
+        closePublishedTab();
     }
 
     @FXML
@@ -239,7 +240,7 @@ public class MainController implements Initializable {
         navTexts();
         manual.setVisible(true);
         manual.getEngine().load(getClass().getResource("../template_html/manual.html").toExternalForm());
-       closePublishedTab();
+        closePublishedTab();
     }
 
     @FXML
@@ -255,7 +256,7 @@ public class MainController implements Initializable {
         navTexts();
         feedback.setVisible(true);
         feedback.getEngine().load(getClass().getResource("../template_html/contacts.html").toExternalForm());
-       closePublishedTab();
+        closePublishedTab();
     }
 
     @FXML
@@ -267,7 +268,7 @@ public class MainController implements Initializable {
     @FXML
     public void goPrev(){
         tabs.getSelectionModel().selectPrevious();
-       closePublishedTab();
+        closePublishedTab();
     }
 
     @FXML
@@ -277,7 +278,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void toHtmlButton() throws FileNotFoundException {
+    public void toHtmlButton() {
         redactorhtml.setText(redactorvisual.getHtmlText());
         preview.setText(redactorvisual.getHtmlText());
         closePublishedTab();
@@ -289,9 +290,18 @@ public class MainController implements Initializable {
         preview.setText(redactorvisual.getHtmlText());
     }
 
-    private void connectDB() throws IOException {
+    @FXML
+    public void clickMouse(MouseEvent event){ // Если клик по вкладке
+        SingleSelectionModel<Tab> selectionModel = tabs.getSelectionModel();
+        if(!selectionModel.isSelected(4)){
+            closePublishedTab();
+        }
+        errors.setText("");
+        success.setText("");
+    }
+
+    private void connectDB() throws IOException {// Соединение с БД
         ConnectSSH.connectSSH();
-        // Соединение с БД
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://" + ConnectSSH.rhost +":" + ConnectSSH.lport + "/";
@@ -312,11 +322,10 @@ public class MainController implements Initializable {
             if(insertCategory){
                 sqlInsertCategory(con);
             }
-        }
-        catch (Exception e){
+        }catch (Exception e){
             errors.setText("Не могу подключиться!\nПроверьте корректность доступов.");
             try {
-                Logs.addLogs(e.toString());
+                logs.addLogs(e.toString());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -328,11 +337,10 @@ public class MainController implements Initializable {
         session.disconnect();
     }
 
-    private void sqlInsertPost(Connection con) throws IOException{ // ПУБЛИКАЦИЯ ЗАПИСИ!
+    private void sqlInsertPost(Connection con) throws IOException{ // Публикация записи
         try{
             Statement st = con.createStatement();
             String today = GetDate.getDate();
-            // Запрос к БД
             sql = "INSERT INTO blog_posts (`id`, `h1`, `text`, `anons`, `category_id`, `picture`, `date`, `title`, `description`, `link`) " +
                     "VALUES (NULL, '"+
                     postH1.getText()+"', '"+
@@ -348,34 +356,30 @@ public class MainController implements Initializable {
             int update = st.executeUpdate(sql);
 
             if(update >= 1){ // Если статья добавлена
-
                 UploadImages.uploadImages(); // Грузим картинки
-
-                int count = PostCount.count + 1; // Увелчииваем счетчик на 1
-                PostCount.setPostCount(count);
-
-                Clear.clear();
-                cancelUpload();
-
-                System.out.println("Информация добавлена");
-                Logs.addLogs("Запись \"" + postH1.getText() + "\" добавлена.\nЗапрос: " + sql);
+                int count = PostCount.count + 1; // Увеличиваем счетчик на 1
+                postCount.setPostCount(count);
+                System.out.println("Статья успешно добавлена");
+                logs.addLogs("Запись \"" + postH1.getText() + "\" добавлена.");
                 published.setDisable(true);
                 readyInfo.setVisible(false);
                 success.setText("Статья успешно добавлена!");
                 success.setStyle("-fx-font-size: 16");
+                Clear.clear();
+                cancelUpload();
                 DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
             }
             else{
-                System.out.println("Информация не добавлена");
-                Logs.addLogs("Запись \"" + postH1.getText() + "\" не добавлена.\nЗапрос: " + sql);
+                System.out.println("Статья не добавлена");
+                logs.addLogs("Запись \"" + postH1.getText() + "\" не добавлена.\nЗапрос: " + sql);
             }
         }catch (Exception s){
-            System.out.println("SQL запрос не выполнен - ошибки!");
-            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            System.out.println("SQL запрос отправлен. Но что-то пошло не так!");
+            logs.addLogs("SQL запрос \""+sql+"\" отправлен. Но что-то пошло не так!");
         }
     }
 
-    private Map<String, String> sqlSelectCategory(Connection con) throws IOException{
+    private Map<String, String> sqlSelectCategory(Connection con) throws IOException{ // Получение категорий
         try{
             Statement st = con.createStatement();
             Map<String, String> category = new HashMap<>();
@@ -389,22 +393,20 @@ public class MainController implements Initializable {
                 String name = rs.getString(2);
                 category.put(id, name);
             }
-            success.setText("Данные получены!"); /// Почему-то не публикуется сообщение!
+            logs.addLogs("Данные "+category+" получены.\nЗапрос: " + sql);
+            success.setText("Данные получены!");
             System.out.println("Данные получены.");
-            Logs.addLogs("Данные "+category+" получены.\nЗапрос: " + sql);
-
             return category;
         }catch (SQLException s){
-            System.out.println("SQL запрос не выполнен - ошибки!");
-            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            System.out.println("SQL запрос отправлен. Но что-то пошло не так!");
+            logs.addLogs("SQL запрос \""+sql+"\" отправлен. Но что-то пошло не так!");
             return null;
         }
     }
 
-    private void sqlInsertCategory(Connection con) throws IOException{
+    private void sqlInsertCategory(Connection con) throws IOException{ // Добавление категории
         try{
             Statement st = con.createStatement();
-            String today = GetDate.getDate();
             // Запрос к БД
             sql = "INSERT INTO blog_category (`id`, `link`, `name`, `title`, `description`) VALUES (NULL, '"+
                     categoryUrl.getText()+"', '"+
@@ -414,28 +416,83 @@ public class MainController implements Initializable {
 
             int update = st.executeUpdate(sql);
             if(update >= 1){
-                System.out.println("Информация добавлена");
-                Logs.addLogs("Категория \"" + categoryName.getText() + "\" добавлена.\nЗапрос: " + sql);
+                System.out.println("Категория добавлена");
+                logs.addLogs("Категория \"" + categoryName.getText() + "\" добавлена.\nЗапрос: " + sql);
                 success.setText("Категория успешно добавлена!");
                 success.setStyle("-fx-font-size: 16");
             }
             else{
-                System.out.println("Информация не добавлена");
-                Logs.addLogs("Категория \"" + categoryName.getText() + "\" не добавлена.\nЗапрос :" + sql);
+                System.out.println("Категория не добавлена");
+                logs.addLogs("Категория \"" + categoryName.getText() + "\" не добавлена.\nЗапрос :" + sql);
             }
         }catch (SQLException s){
-            System.out.println("SQL запрос не выполнен - ошибки!");
-            Logs.addLogs("SQL запрос \""+sql+"\" не выполнен - ошибки!");
+            System.out.println("SQL запрос отправлен. Но что-то пошло не так!");
+            logs.addLogs("SQL запрос \""+sql+"\" отправлен. Но что-то пошло не так!");
         }
     }
 
-    public void finishPublication() throws IOException {
-        insertPost = true;
-        connectDB();
+    @FXML
+    public void getCategory() throws IOException { // Получение категорий
+        UserSettingsFill.assertsFill();
+        if(assertsServerAndDbIsFill){
+            selectCategory = true;
+            connectDB();
+            Map<String, String> categoryItemsMap = sqlSelectCategory;
+
+            categoryItems.getChildren().clear();
+            for (String categoryItem : categoryItemsMap.keySet()){
+                RadioButton item = new RadioButton();
+                item.setToggleGroup(category);
+                item.setText(categoryItemsMap.get(categoryItem));
+                item.setId(categoryItem);
+                categoryItems.getChildren().add(item);
+            }
+        }else {
+            errors.setText("Не все настройки заполнены.\nПроверьте настройки!");
+        }
+        assertsServerAndDbIsFill = true;
+    }
+
+    private void checkedCategory(){ // Выбор категории
+        categoryId = "-1";
+        for (Node item : categoryItems.getChildren()){
+            RadioButton btn = new RadioButton();
+            btn = (RadioButton) item;
+            if(btn.isSelected()){
+                categoryId = btn.getId();
+            }
+        }
+        errors.setText("");
+        success.setText("");
     }
 
     @FXML
-    public void postReadyCheck() throws IOException {
+    private void addCategory(){ // Вывод формы добавления категории
+        addCategoryForm.setVisible(true);
+        errors.setText("");
+        success.setText("");
+    }
+
+    @FXML
+    private void addCategorySql() throws IOException { // Добавление категории
+        errors.setText("");
+        success.setText("");
+        if(!categoryName.getText().isEmpty() && !categoryUrl.getText().isEmpty()){
+            UserSettingsFill.assertsFill();
+            if(assertsServerAndDbIsFill){
+                insertCategory = true;
+                connectDB();
+            }else {
+                errors.setText("Не все настройки подключения заполнены.\nЗаполните настройки и повторите попытку.");
+                assertsServerAndDbIsFill = true;
+            }
+        }else {
+            errors.setText("Ошибка при добавлении категории!\nНе заполнены обязательные поля.");
+        }
+    }
+
+    @FXML
+    public void postReadyCheck() throws IOException { // Проверка готовности публикации
         readyInfo.setVisible(true);
         assertsServerAndDbIsFill = true;
         errors.setText("");
@@ -472,7 +529,6 @@ public class MainController implements Initializable {
             emptyTextareaCheck.get(key).getChildren().addAll(icon);
         }
 
-
         Parent icon = null;
         if(redactorhtml.getText().isEmpty()){
             icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
@@ -490,7 +546,6 @@ public class MainController implements Initializable {
         }
         checkImage.getChildren().clear();
         checkImage.getChildren().addAll(icon);
-
 
         UserSettingsFill.assertsFill();
         checkedCategory();
@@ -537,81 +592,13 @@ public class MainController implements Initializable {
         }
     }
 
-    @FXML
-    public void clickMouse(MouseEvent event){ // Если клик по вкладке
-        SingleSelectionModel<Tab> selectionModel = tabs.getSelectionModel();
-        if(!selectionModel.isSelected(4)){
-            closePublishedTab();
-        }
-        errors.setText("");
-        success.setText("");
+    public void finishPublication() throws IOException { // Завершение публикации
+        insertPost = true;
+        connectDB();
     }
 
     @FXML
-    public void getCategory() throws IOException {
-        UserSettingsFill.assertsFill();
-        if(assertsServerAndDbIsFill){
-            selectCategory = true;
-            connectDB();
-            Map<String, String> categoryItemsMap = sqlSelectCategory;
-
-            categoryItems.getChildren().clear();
-            for (String categoryItem : categoryItemsMap.keySet()){
-                RadioButton item = new RadioButton();
-                item.setToggleGroup(category);
-                item.setText(categoryItemsMap.get(categoryItem));
-                item.setId(categoryItem);
-                categoryItems.getChildren().add(item);
-            }
-            errors.setText("");
-            success.setText("");
-        }else {
-            errors.setText("Не все настройки заполнены.\nПроверьте настройки!");
-        }
-        assertsServerAndDbIsFill = true;
-    }
-
-    private void checkedCategory(){
-        categoryId = "-1";
-        for (Node item : categoryItems.getChildren()){
-            RadioButton btn = new RadioButton();
-            btn = (RadioButton) item;
-            if(btn.isSelected()){
-                categoryId = btn.getId();
-            }
-        }
-        errors.setText("");
-        success.setText("");
-    }
-
-    @FXML
-    private void addCategory(){
-        addCategoryForm.setVisible(true);
-        errors.setText("");
-        success.setText("");
-    }
-
-    @FXML
-    private void addCategorySql() throws IOException {
-        errors.setText("");
-        success.setText("");
-        if(!categoryName.getText().isEmpty() && !categoryUrl.getText().isEmpty()){
-            UserSettingsFill.assertsFill();
-            if(assertsServerAndDbIsFill){
-                insertCategory = true;
-                connectDB();
-            }else {
-                errors.setText("Не все настройки подключения заполнены.\nЗаполните настройки и повторите попытку.");
-                assertsServerAndDbIsFill = true;
-            }
-        }else {
-            System.out.println("ошибка");
-            errors.setText("Ошибка при добавлении категории!\nНе заполнены обязательные поля.");
-        }
-    }
-
-    @FXML
-    public void selectMainImages() throws IOException {
+    public void selectMainImages() throws IOException { // Вывод миниатюры главной картинки
         mainImg.getChildren().clear();
         UploadMainImage uploadMainImage = new UploadMainImage();
         uploadMainImage.selectMainImages();

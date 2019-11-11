@@ -10,6 +10,7 @@ public class ConnectSSH {
     public static int lport;
     public static String rhost;
     private static int rport;
+    private static Logs logs = new Logs();
 
     public static void connectSSH() throws IOException {
         // Соединение по SSH
@@ -23,11 +24,11 @@ public class ConnectSSH {
             MainController.session.setPassword(MainController.userSettings.get("sshpassword"));
             MainController.session.setConfig("StrictHostKeyChecking", "no");
             System.out.println("Устанавливаю соединение...");
-            Logs.addLogs("Устанавливаю соединение...");
+            logs.addLogs("Устанавливаю соединение...");
             MainController.session.connect();
             int assinged_port = MainController.session.setPortForwardingL(lport, rhost, rport);
             System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
-            Logs.addLogs("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+            logs.addLogs("localhost:"+assinged_port+" -> "+rhost+":"+rport);
         }
         catch(Exception e){
             System.err.print(e);

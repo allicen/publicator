@@ -21,10 +21,10 @@ public class UploadMainImage extends MainController {
     private static final int MAX_WIDTH_IMG = 1000;
     public static final int MAX_WIDTH_PREVIEW = 200;
     private static BufferedImage resizeImage;
-    private static InputStream stream = null;
     public static int width;
     public static int height;
     public static ImageView imageView;
+    private static Logs logs = new Logs();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
@@ -41,7 +41,7 @@ public class UploadMainImage extends MainController {
             fileName = file.getName();
             isValidateFile = ValidateFile.validateImg(file);
             if (isValidateFile) {
-                Logs.addLogs("Выбран файл для главной картинки " + file.getName());
+                logs.addLogs("Выбран файл для главной картинки " + file.getName());
                 String formatName = getFileExtension(file);
                 BufferedImage image = ImageIO.read(file);
                 resizeImg(image);
@@ -61,7 +61,7 @@ public class UploadMainImage extends MainController {
     }
 
     private static void resizeImg(BufferedImage image){
-        width = (image.getWidth() > MAX_WIDTH_IMG) ? 1000 : image.getWidth();
+        width = (image.getWidth() > MAX_WIDTH_IMG) ? MAX_WIDTH_IMG : image.getWidth();
         height = (width >= MAX_WIDTH_IMG) ? width * image.getHeight() / image.getWidth() : image.getHeight();
         resizeImage = Images.resizeImage(image, width, height, image.getType());
     }
