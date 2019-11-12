@@ -7,9 +7,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.HTMLEditor?>
 
-
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="application.lib.MainController" prefHeight="700">
     <MenuBar styleClass="menu" maxWidth="Infinity" maxHeight="Infinity">
         <menus>
@@ -42,17 +39,17 @@
                                 <AnchorPane id="Content">
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="30">
-                                            <Text styleClass="title-tab" text="★ Выберите файл с расширением .docx" underline="false"/>
+                                            <Text styleClass="title-tab" text="★ Выберите файл с расширением .docx"/>
                                             <HBox spacing="30">
                                                 <Button styleClass="main-btn" mnemonicParsing="false" text="Выбрать файл" onAction="#upload" prefWidth="250"/>
                                                 <AnchorPane>
                                                     <StackPane fx:id="fileUpload" AnchorPane.topAnchor="12"/>
                                                 </AnchorPane>
                                             </HBox>
-                                            <ProgressIndicator progress="-1.0" visible="false" fx:id="load"/>
+                                            <ProgressIndicator visible="false" fx:id="load"/>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
-                                            <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Сброс" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#cancelUpload"/>
+                                            <Button cancelButton="true" focusTraversable="false" mnemonicParsing="false" text="Сброс" textFill="BLACK" prefWidth="100" onAction="#cancelUpload"/>
                                             <Button defaultButton="true" mnemonicParsing="false" text="Далее" prefWidth="100" onAction="#goNext"/>
                                         </HBox>
                                     </children>
@@ -64,7 +61,7 @@
                                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" >
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="100" spacing="30">
-                                            <Text styleClass="title-tab" fontSmoothingType="LCD" underline="false" text="★ Проверьте результат" />
+                                            <Text styleClass="title-tab" fontSmoothingType="LCD" text="★ Проверьте результат" />
                                             <VBox>
                                                 <AnchorPane>
                                                     <HBox AnchorPane.bottomAnchor="10" style="-fx-font-size: 14" spacing="10">
@@ -79,7 +76,7 @@
                                             <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"/>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
-                                            <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Править" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#goNext"/>
+                                            <Button cancelButton="true" focusTraversable="false" mnemonicParsing="false" text="Править" textFill="BLACK" prefWidth="100" onAction="#goNext"/>
                                             <Button defaultButton="true" mnemonicParsing="false" text="Всё OK!" prefWidth="100" onAction="#goThen"/>
                                         </HBox>
                                     </children>
@@ -91,12 +88,12 @@
                                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" maxHeight="Infinity">
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="100" spacing="30">
-                                            <Text styleClass="title-tab" fontSmoothingType="LCD" underline="false" text="★ При необходимости внесите правки" />
+                                            <Text styleClass="title-tab" fontSmoothingType="LCD" text="★ При необходимости внесите правки" />
                                             <TabPane tabClosingPolicy="UNAVAILABLE" >
                                                 <Tab text="HTML">
                                                     <content>
                                                         <VBox AnchorPane.topAnchor="30" AnchorPane.bottomAnchor="30">
-                                                            <TextArea fx:id="redactorhtml" text="" wrapText="true" prefHeight="2000"/>
+                                                            <TextArea fx:id="redactorhtml" wrapText="true" prefHeight="2000"/>
                                                         </VBox>
                                                     </content>
                                                 </Tab>
@@ -118,7 +115,7 @@
                                             <Label styleClass="notice" text="* - Загрузите файл" wrapText="true"/>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
-                                            <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Назад" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#goPrev"/>
+                                            <Button cancelButton="true" focusTraversable="false" mnemonicParsing="false" text="Назад" textFill="BLACK" prefWidth="100" onAction="#goPrev"/>
                                             <Button defaultButton="true" mnemonicParsing="false" text="Далее" prefWidth="100" onAction="#goNext"/>
                                         </HBox>
                                     </children>
@@ -135,35 +132,35 @@
                                                 <HBox>
                                                     <Label styleClass="label-text" text="H1" prefWidth="150"/>
                                                     <VBox HBox.hgrow="ALWAYS">
-                                                        <TextField text="" minWidth="0" fx:id="postH1"/>
+                                                        <TextField minWidth="0" fx:id="postH1"/>
                                                         <Label wrapText="true" styleClass="notice" text="Укажите заголовок статьи"/>
                                                     </VBox>
                                                 </HBox>
                                                 <HBox>
-                                                    <Label styleClass="label-text" text="URL" prefWidth="150"/>
+                                                    <Label styleClass="label-text" text="Ссылка" prefWidth="150"/>
                                                     <VBox HBox.hgrow="ALWAYS">
-                                                        <TextField text="" minWidth="0" fx:id="postUrl"/>
-                                                        <Label wrapText="true" styleClass="notice" text="Укажите относительный URL для статьи. Например, sample. Допускаются английские буквы, цифры, дефис и знак подчеркивания."/>
+                                                        <TextField minWidth="0" fx:id="postUrl"/>
+                                                        <Label wrapText="true" styleClass="notice" text="Укажите относительную ссылку для статьи. Например, sample. Допускаются английские буквы, цифры, дефис и знак подчеркивания."/>
                                                     </VBox>
                                                 </HBox>
                                                 <HBox>
                                                     <Label styleClass="label-text" text="Анонс" prefWidth="150" />
                                                     <VBox HBox.hgrow="ALWAYS">
-                                                        <TextArea layoutX="150" text="" wrapText="true" HBox.hgrow="ALWAYS" fx:id="postAnons"/>
+                                                        <TextArea layoutX="150" wrapText="true" HBox.hgrow="ALWAYS" fx:id="postAnons"/>
                                                         <Label wrapText="true" styleClass="notice" text="Напишите несколько предложений, о чем будет статья."/>
                                                     </VBox>
                                                 </HBox>
                                                 <HBox>
                                                     <Label styleClass="label-text" text="Title" prefWidth="150"/>
                                                     <VBox HBox.hgrow="ALWAYS">
-                                                        <TextField text="" fx:id="postTitle"/>
+                                                        <TextField fx:id="postTitle"/>
                                                         <Label wrapText="true"  styleClass="notice" text="Заголовок для поисковиков. Title должен включать наиболее частотный запрос. Рекомендуемая длина - около 170 символов." />
                                                     </VBox>
                                                 </HBox>
                                                 <HBox>
                                                     <Label styleClass="label-text" text="Description" prefWidth="150"/>
                                                     <VBox HBox.hgrow="ALWAYS">
-                                                        <TextArea text="" wrapText="true" fx:id="postDescription"/>
+                                                        <TextArea wrapText="true" fx:id="postDescription"/>
                                                         <Label wrapText="true"  styleClass="notice" text="Описание для поисковиков. Включает другие запросы и слова из подсветки. Рекомендуемая длина - около 155 симв." />
                                                     </VBox>
                                                 </HBox>
@@ -181,7 +178,7 @@
                                             </VBox>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="10">
-                                            <Button cancelButton="true" defaultButton="false" disable="false" focusTraversable="false" mnemonicParsing="false" text="Назад" textFill="BLACK" underline="false" visible="true" wrapText="false" prefWidth="100" onAction="#goPrev"/>
+                                            <Button cancelButton="true" focusTraversable="false" mnemonicParsing="false" text="Назад" textFill="BLACK" prefWidth="100" onAction="#goPrev"/>
                                             <Button defaultButton="true" mnemonicParsing="false" text="Далее" prefWidth="100" onAction="#goNext"/>
                                         </HBox>
                                     </children>
@@ -193,13 +190,13 @@
                                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0">
                                     <children>
                                         <VBox AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
-                                            <Text styleClass="title-tab" fontSmoothingType="LCD" underline="false" text="★ Публикация" />
+                                            <Text styleClass="title-tab" fontSmoothingType="LCD" text="★ Публикация" />
                                             <HBox spacing="20">
                                                 <Button text="Получить категории" onAction="#getCategory" styleClass="getCategoriesBtn"/>
                                                 <Button text="Добавить категорию" onAction="#addCategory" styleClass="cancel-button"/>
                                                 <HBox visible="false" spacing="5" fx:id="addCategoryForm">
                                                     <TextField promptText="Название *" fx:id="categoryName"/>
-                                                    <TextField promptText="URL *" fx:id="categoryUrl"/>
+                                                    <TextField promptText="Ссылка на категорию *" fx:id="categoryUrl"/>
                                                     <TextField promptText="Title" fx:id="categoryTitle"/>
                                                     <TextField promptText="Description" fx:id="categoryDescription"/>
                                                     <Button text="Добавить" onAction="#addCategorySql"/>
@@ -230,7 +227,7 @@
                                                         <StackPane fx:id="chechH1"/>
                                                     </HBox>
                                                     <HBox spacing="10">
-                                                        <Label text="           2. URL:" />
+                                                        <Label text="           2. Ссылка на запись:" />
                                                         <StackPane fx:id="checkUrl"/>
                                                     </HBox>
                                                     <HBox spacing="10">
@@ -254,20 +251,12 @@
                                                         <StackPane fx:id="checkHtml"/>
                                                     </HBox>
                                                 </VBox>
-                                                <!--<HBox spacing="10">-->
-                                                <!--<Label text="Соединение с БД:" styleClass="label-text"/>-->
-                                                <!--<Label text="Установлено" styleClass="red-text"/>-->
-                                                <!--</HBox>-->
-                                                <!--<HBox spacing="10">-->
-                                                <!--<Label text="Соединение с сервером:" styleClass="label-text"/>-->
-                                                <!--<Label text="Установлено" styleClass="red-text"/>-->
-                                                <!--</HBox>-->
                                             </VBox>
                                         </VBox>
                                         <HBox AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30" spacing="20">
                                             <AnchorPane>
-                                                <Label text="" fx:id="success" style="-fx-font-size: 14" styleClass="green-text-notice" />
-                                                <Label text="" fx:id="errors" style="-fx-font-size: 14" styleClass="red-text-notice" />
+                                                <Label fx:id="success" style="-fx-font-size: 14" styleClass="green-text-notice" />
+                                                <Label fx:id="errors" style="-fx-font-size: 14" styleClass="red-text-notice" />
                                             </AnchorPane>
                                             <Button styleClass="main-btn" defaultButton="true" mnemonicParsing="false" text="Опубликовать!" prefWidth="250" onAction="#finishPublication" fx:id="published" disable="true">
                                                 <font>
@@ -282,19 +271,22 @@
                     </tabs>
                 </TabPane>
                 <VBox fx:id="text" visible="false">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" maxWidth="3000" maxHeight="Infinity">
-                        <VBox fx:id="settings" visible="false" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
-                            <fx:include source="components/userSettings.fxml"/>
-                        </VBox>
-
-                        <VBox fx:id="showLogs" visible="false" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
-                            <fx:include source="components/logPage.fxml"/>
-                        </VBox>
-                        <WebView fx:id="about"/>
-                        <WebView fx:id="manual"/>
-                        <WebView fx:id="faq"/>
-                        <WebView fx:id="feedback"/>
-                    </AnchorPane>
+                    <StackPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" maxWidth="3000" maxHeight="Infinity">
+                            <VBox fx:id="settings" visible="false" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
+                                <fx:include source="components/userSettings.fxml"/>
+                            </VBox>
+                            <VBox fx:id="showLogs" visible="false" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="30" spacing="20">
+                                <fx:include source="components/logPage.fxml"/>
+                            </VBox>
+                        </AnchorPane>
+                        <StackPane fx:id="web" >
+                            <WebView fx:id="about"/>
+                            <WebView fx:id="manual"/>
+                            <WebView fx:id="faq"/>
+                            <WebView fx:id="feedback"/>
+                        </StackPane>
+                    </StackPane>
                 </VBox>
             </StackPane>
         </center>

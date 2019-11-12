@@ -14,7 +14,7 @@ public class ValidateFile {
         return queue.getLast().equals("docx");
     }
 
-    public static boolean validateImg(File file){
+    static boolean validateImg(File file){
         ArrayDeque<String> queue = new ArrayDeque<>();
         StringTokenizer st = new StringTokenizer(file.getName(), ".");
         while (st.hasMoreTokens()){

@@ -44,7 +44,7 @@ import static application.lib.classes.ValidateFile.validateFile;
 public class MainController implements Initializable {
     public static Timer timer = new Timer();
     private static Logs logs = new Logs();
-    public PostCount postCount = new PostCount();
+    private PostCount postCount = new PostCount();
 
     // Пользовательские настройки
     public static Map<String, String> userSettings = new HashMap<>();
@@ -85,6 +85,7 @@ public class MainController implements Initializable {
     public WebView manual;
     public WebView faq;
     public WebView feedback;
+    public StackPane web;
     public BorderPane main;
     public StackPane fileUpload;
     public Tab tabGoThen;
@@ -217,6 +218,7 @@ public class MainController implements Initializable {
     public void settings(){
         navTexts();
         settings.setVisible(true);
+        web.setVisible(false);
         closePublishedTab();
     }
 
@@ -224,12 +226,14 @@ public class MainController implements Initializable {
     private void showLogs(){
         navTexts();
         showLogs.setVisible(true);
+        web.setVisible(false);
         closePublishedTab();
     }
 
     @FXML
     public void about(){
         navTexts();
+        web.setVisible(true);
         about.setVisible(true);
         about.getEngine().load(getClass().getResource("../template_html/about.html").toExternalForm());
         closePublishedTab();
@@ -238,6 +242,7 @@ public class MainController implements Initializable {
     @FXML
     public void manual(){
         navTexts();
+        web.setVisible(true);
         manual.setVisible(true);
         manual.getEngine().load(getClass().getResource("../template_html/manual.html").toExternalForm());
         closePublishedTab();
@@ -246,6 +251,7 @@ public class MainController implements Initializable {
     @FXML
     public void faq(){
         navTexts();
+        web.setVisible(true);
         faq.setVisible(true);
         faq.getEngine().load(getClass().getResource("../template_html/faq.html").toExternalForm());
        closePublishedTab();
@@ -254,6 +260,7 @@ public class MainController implements Initializable {
     @FXML
     public void feedback(){
         navTexts();
+        web.setVisible(true);
         feedback.setVisible(true);
         feedback.getEngine().load(getClass().getResource("../template_html/contacts.html").toExternalForm());
         closePublishedTab();

@@ -1,0 +1,24 @@
+body{
+    font-family: Calibri, serif;
+    padding: 0 50px 20px 50px;
+}
+
+a{
+    text-decoration: none;
+    color: #024A68;
+}
+
+a:hover{
+    border-bottom: 1px dashed #024A68;
+}
+
+.button-top{
+    color: white;
+    background-color: #024A68;
+    padding: 10px 20px;
+}
+
+.button-top:hover{
+    background-color: #63AFD0;
+    border-bottom: none;
+}

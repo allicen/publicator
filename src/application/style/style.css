@@ -123,6 +123,11 @@
     -fx-padding: 20;
 }
 
+.web-view{
+    width: 100%;
+}
+
+
 
 
 
