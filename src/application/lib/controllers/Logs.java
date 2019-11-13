@@ -1,6 +1,7 @@
 package application.lib.controllers;
 
 import application.lib.MainController;
+import application.lib.classes.JarFilePath;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
@@ -8,16 +9,16 @@ import javafx.scene.web.WebView;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Logs extends MainController {
-    private static final String LOGS_PATH = "../../logs/logs.txt";
-    private static final String LOGS_PATH_ = "E:\\JAVA\\FX\\publicator\\out\\production\\publicator\\application\\logs\\logs.txt";
+    private static JarFilePath filePath = new JarFilePath();
+
+    private static final String LOGS_PATH = filePath.getFilePath("files/logs/logs.txt");
 
     // Логи
     public Label infoLogs;
@@ -38,7 +39,7 @@ public class Logs extends MainController {
         String today = String.format("%tF %tT", date, date);
         text = today + "\n" + text + "\n\n";
         try {
-            Files.write(Paths.get(LOGS_PATH_), text.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(LOGS_PATH), text.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         }
         catch (IOException e) {
             System.out.println(e);
@@ -50,7 +51,7 @@ public class Logs extends MainController {
 
         StringBuilder content = new StringBuilder();
 
-        FileReader file = new FileReader(getClass().getResource(LOGS_PATH).getPath());
+        InputStreamReader file = new InputStreamReader(new FileInputStream(LOGS_PATH), StandardCharsets.UTF_8);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             content.append(sc.nextLine()).append("<br>");
@@ -72,7 +73,7 @@ public class Logs extends MainController {
 
     @FXML
     private void deleteLogs() throws IOException {
-        PrintWriter pw = new PrintWriter(new File(getClass().getResource(LOGS_PATH).getPath()));
+        PrintWriter pw = new PrintWriter(new File(LOGS_PATH));
         pw.print("");
         pw.close();
         getLogs();
@@ -89,28 +90,8 @@ public class Logs extends MainController {
     }
 
     @FXML
-    private void downloadLogs() throws IOException {
-        URL fileLogUrl = new URL("https://github.com/allicen/Java-10000/blob/master/alibaba/README.md");
-        ReadableByteChannel rbc = Channels.newChannel(fileLogUrl.openStream());
-        FileOutputStream fos = new FileOutputStream("logs.txt");
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        rbc.close();
-
-        logActionResult.setVisible(true);
-        logActionResult.setText("Файл скачан!");
-        timer.schedule( // Таймер для скрытия уведомлений
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        logActionResult.setVisible(false);
-                    }
-                }, 500);
-    }
-
-    @FXML
     private String getLogFileSize() throws IOException {
-        File logFile = new File(getClass().getResource(LOGS_PATH).getPath());
+        File logFile = new File(LOGS_PATH);
         String size = "";
         if(logFile.exists()){
             size = String.valueOf(logFile.length());

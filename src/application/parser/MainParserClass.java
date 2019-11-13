@@ -1,6 +1,7 @@
 package application.parser;
 
 import application.Main;
+import application.lib.classes.JarFilePath;
 import application.lib.classes.PostCount;
 import application.parser.components.*;
 import org.apache.poi.xwpf.usermodel.*;
@@ -9,9 +10,10 @@ import java.util.*;
 
 
 public class MainParserClass {
+    private static JarFilePath filePath = new JarFilePath();
     public static StringBuilder out = new StringBuilder();
     private static final String NAME_HTML_FILE = "read.html";
-    private static final String PATH_HTML_FILE = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\html_file\\";
+    public static final String PATH_HTML_FILE = filePath.getFilePath("files/user_files/tmp/html_file/");
     public static String postName = "";
     public static boolean isBlockquote = false;
 
@@ -93,6 +95,10 @@ public class MainParserClass {
 
                                 }
                             }
+                        }
+                        if(Main.postH1.equals("")){
+                            PostCount postCount = new PostCount();
+                            Main.postUrl = String.valueOf(postCount.getPostCount());
                         }
 
                     }else if(typeParagraph.getFirst() == "bullet"){ // Маркированные списки

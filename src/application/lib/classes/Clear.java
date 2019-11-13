@@ -1,6 +1,7 @@
 package application.lib.classes;
 
 import application.Main;
+import application.parser.MainParserClass;
 
 public class Clear {
     public static void clear(){
@@ -12,6 +13,9 @@ public class Clear {
         Main.postDate = "";
         Main.postTitle = "";
         Main.postDescription = "";
-        Main.postUrl = "";
+        MainParserClass.out = new StringBuilder("");
+        MainParserClass.postName = "";
+        DeleteFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY);
+        DeleteFiles.deleteHtmlFile(MainParserClass.PATH_HTML_FILE);
     }
 }

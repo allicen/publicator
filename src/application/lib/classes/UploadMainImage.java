@@ -5,7 +5,6 @@ import application.lib.MainController;
 import application.lib.controllers.Logs;
 import application.parser.components.Images;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
@@ -36,7 +35,7 @@ public class UploadMainImage extends MainController {
         JFileChooser window = new JFileChooser();
         int returnValue = window.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            DeleteImgFiles.deleteOldImgFolder(UploadImages.PATH_DIRECTORY);
+            DeleteFiles.deleteOldImgFolder(UploadImages.PATH_DIRECTORY);
             File file = window.getSelectedFile();
             fileName = file.getName();
             isValidateFile = ValidateFile.validateImg(file);

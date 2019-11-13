@@ -1,5 +1,6 @@
 package application.parser.components;
 
+import application.lib.classes.JarFilePath;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
 
@@ -11,12 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class Images {
+    private static JarFilePath filePath = new JarFilePath();
     private static final int MAX_WIDTH_IMAGE = 1000; // Максимальная ширина картинки
-    public final static String PATH_DIRECTORY_IMG = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\"; // Директория, в которую сохраняется картинка
+    public final static String PATH_DIRECTORY_IMG = filePath.getFilePath("files/user_files/tmp/images/"); // Директория, в которую сохраняется картинка
     private static BufferedImage resizeImage;
     private static BufferedImage imag;
 

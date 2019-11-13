@@ -1,6 +1,7 @@
 package application.lib.controllers;
 
 import application.lib.MainController;
+import application.lib.classes.JarFilePath;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,9 +18,10 @@ import java.net.URL;
 import java.util.*;
 
 public class UserSettings extends MainController {
+    private static JarFilePath filePath = new JarFilePath();
 
-    private static final String USER_SETTINGS_FILE = "../../user_settings/settings.txt";
-    private static final String USER_OPTIONS_FILE = "../../user_settings/selectedOptions.txt";
+    private static final String USER_SETTINGS_FILE = filePath.getFilePath("files/user_settings/settings.txt");
+    private static final String USER_OPTIONS_FILE = filePath.getFilePath("files/user_settings/selectedOptions.txt");
     private static Logs logs = new Logs();
 
     // Проверка полей на заполненность
@@ -110,7 +112,7 @@ public class UserSettings extends MainController {
     private Map<TextField, String> getCustomSettings() throws IOException{ // Выгрузка настроек подключений из файла
         ArrayList<TextField> fields = addFields();
         Map<TextField, String> userSettings = new HashMap<>();
-        FileReader file = new FileReader(getClass().getResource(USER_SETTINGS_FILE).getPath());
+        FileReader file = new FileReader(USER_SETTINGS_FILE);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -135,7 +137,7 @@ public class UserSettings extends MainController {
     }
 
     private void saveCustomSettings(String newSettings) throws IOException{ // Запись настроек подключения
-        PrintWriter pw = new PrintWriter(new File(getClass().getResource(USER_SETTINGS_FILE).getPath()));
+        PrintWriter pw = new PrintWriter(new File(USER_SETTINGS_FILE));
         pw.print(newSettings);
         pw.close();
         logs.addLogs("Обновлены настройки");
@@ -144,7 +146,7 @@ public class UserSettings extends MainController {
     private Map<CheckBox, String> getCustomerCheckedImportSettings() throws IOException { // Получить настройки импорта
         ArrayList<CheckBox> checksSettings = addCheckedSettings();
         Map<CheckBox, String> userCheck = new HashMap<>();
-        FileReader file = new FileReader(getClass().getResource(USER_OPTIONS_FILE).getPath());
+        FileReader file = new FileReader(USER_OPTIONS_FILE);
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine()){
             ArrayList<String> tokensArr = new ArrayList<>();
@@ -178,7 +180,7 @@ public class UserSettings extends MainController {
             MainController.userImportSettings.put(aListCheck.getId(), newSelect);
         }
 
-        PrintWriter pw = new PrintWriter(new File(getClass().getResource(USER_OPTIONS_FILE).getPath()));
+        PrintWriter pw = new PrintWriter(new File(USER_OPTIONS_FILE));
         pw.print(newSettingsOptions);
         pw.close();
         logs.addLogs("Изменены настройки импорта");
@@ -197,7 +199,7 @@ public class UserSettings extends MainController {
 
             if(listFields.get(i).getText().trim().isEmpty()){
                 try {
-                    Parent error = FXMLLoader.load(getClass().getResource("../../gui/components/marks/error.fxml"));
+                    Parent error = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/error.fxml"));
                     listMessage.get(i).getChildren().clear();
                     listMessage.get(i).getChildren().addAll(error);
 
@@ -206,7 +208,7 @@ public class UserSettings extends MainController {
                 }
             }else{
                 try {
-                    Parent success = FXMLLoader.load(getClass().getResource("../../gui/components/marks/success.fxml"));
+                    Parent success = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/success.fxml"));
                     listMessage.get(i).getChildren().clear();
                     listMessage.get(i).getChildren().addAll(success);
 

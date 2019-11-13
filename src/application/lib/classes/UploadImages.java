@@ -1,8 +1,6 @@
 package application.lib.classes;
 
 import application.lib.MainController;
-import application.lib.controllers.Logs;
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -13,10 +11,11 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class UploadImages{
+    private static JarFilePath filePath = new JarFilePath();
     private static ArrayList<String> filesName = new ArrayList<>();
     private FTPClient ftp = null;
-    private static final String FTP_LOCAL_DIRECTORY = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images\\";
-    public static final String PATH_DIRECTORY = "E:\\JAVA\\FX\\publicator\\src\\application\\user_files\\tmp\\images";
+    private static final String FTP_LOCAL_DIRECTORY =filePath.getFilePath("files/user_files/tmp/images/");
+    public static final String PATH_DIRECTORY = filePath.getFilePath("files/user_files/tmp/images");
 
     private static void getFiles(){
         File pathDir = null;

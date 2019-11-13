@@ -154,7 +154,7 @@ public class MainController implements Initializable {
 
                 try {
                     assert document != null;
-                    Parent success = FXMLLoader.load(getClass().getResource("../gui/components/marks/fileUpload.fxml"));
+                    Parent success = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/fileUpload.fxml"));
                     fileUpload.getChildren().clear();
                     fileUpload.getChildren().addAll(success);
                     document.close();
@@ -185,6 +185,7 @@ public class MainController implements Initializable {
         fileUpload.getChildren().clear();
         mainImg.getChildren().clear();
         noticeMainImg.setText("");
+        Clear.clear();
         closePublishedTab();
     }
 
@@ -235,7 +236,7 @@ public class MainController implements Initializable {
         navTexts();
         web.setVisible(true);
         about.setVisible(true);
-        about.getEngine().load(getClass().getResource("../template_html/about.html").toExternalForm());
+        about.getEngine().load(getClass().getResource("/application/template_html/about.html").toExternalForm());
         closePublishedTab();
     }
 
@@ -244,7 +245,7 @@ public class MainController implements Initializable {
         navTexts();
         web.setVisible(true);
         manual.setVisible(true);
-        manual.getEngine().load(getClass().getResource("../template_html/manual.html").toExternalForm());
+        manual.getEngine().load(getClass().getResource("/application/template_html/manual.html").toExternalForm());
         closePublishedTab();
     }
 
@@ -253,7 +254,7 @@ public class MainController implements Initializable {
         navTexts();
         web.setVisible(true);
         faq.setVisible(true);
-        faq.getEngine().load(getClass().getResource("../template_html/faq.html").toExternalForm());
+        faq.getEngine().load(getClass().getResource("/application/template_html/faq.html").toExternalForm());
        closePublishedTab();
     }
 
@@ -262,7 +263,7 @@ public class MainController implements Initializable {
         navTexts();
         web.setVisible(true);
         feedback.setVisible(true);
-        feedback.getEngine().load(getClass().getResource("../template_html/contacts.html").toExternalForm());
+        feedback.getEngine().load(getClass().getResource("/application/template_html/contacts.html").toExternalForm());
         closePublishedTab();
     }
 
@@ -374,7 +375,6 @@ public class MainController implements Initializable {
                 success.setStyle("-fx-font-size: 16");
                 Clear.clear();
                 cancelUpload();
-                DeleteImgFiles.deleteAllFilesFolder(UploadImages.PATH_DIRECTORY); // Удалить все картинки после добавления записи
             }
             else{
                 System.out.println("Статья не добавлена");
@@ -517,9 +517,9 @@ public class MainController implements Initializable {
         for(TextField key : emptyFieldsCheck.keySet()){
             Parent icon = null;
             if(key.getText().isEmpty()){
-                icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
+                icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/error.fxml"));
             }else {
-                icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
+                icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/success.fxml"));
             }
             emptyFieldsCheck.get(key).getChildren().clear();
             emptyFieldsCheck.get(key).getChildren().addAll(icon);
@@ -528,9 +528,9 @@ public class MainController implements Initializable {
         for(TextArea key : emptyTextareaCheck.keySet()){
             Parent icon = null;
             if(key.getText().isEmpty()){
-                icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
+                icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/error.fxml"));
             }else {
-                icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
+                icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/success.fxml"));
             }
             emptyTextareaCheck.get(key).getChildren().clear();
             emptyTextareaCheck.get(key).getChildren().addAll(icon);
@@ -538,18 +538,18 @@ public class MainController implements Initializable {
 
         Parent icon = null;
         if(redactorhtml.getText().isEmpty()){
-            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
+            icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/error.fxml"));
         }else {
-            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
+            icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/success.fxml"));
         }
 
         checkHtml.getChildren().clear();
         checkHtml.getChildren().addAll(icon);
 
         if(Main.postImage.isEmpty()){
-            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/error.fxml"));
+            icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/error.fxml"));
         }else {
-            icon = FXMLLoader.load(getClass().getResource("../gui/components/marks/success.fxml"));
+            icon = FXMLLoader.load(getClass().getResource("/application/gui/components/marks/success.fxml"));
         }
         checkImage.getChildren().clear();
         checkImage.getChildren().addAll(icon);

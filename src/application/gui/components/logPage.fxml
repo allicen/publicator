@@ -8,7 +8,6 @@
     <Text styleClass="title-tab" text="★ Просмотр логов"/>
     <HBox spacing="10">
         <Button text="Загрузить логи" onAction="#getLogs"/>
-        <Button text="Скачать логи" onAction="#downloadLogs"/>
         <Button text="Удалить логи" onAction="#deleteLogs"/>
         <Label fx:id="logActionResult" styleClass="green-text-notice"/>
     </HBox>
